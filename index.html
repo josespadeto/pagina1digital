@@ -147,12 +147,11 @@
     .avatar { position: relative; width: min(100%, 420px); height: auto; overflow: visible; }
 
     .avatar .st { stroke: var(--line); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; fill: none; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawLine 2s var(--ease) 0.8s forwards; }
-    .avatar .f, .avatar .b { opacity: 0; animation: fadeInFill 1s var(--ease) 1.8s forwards; }
+    .avatar .f, .avatar .b { opacity: 0; animation: fadeInFill 1.5s var(--ease) 2.2s forwards; }
     .avatar .b { fill: var(--skin); }
     .avatar .f { fill: var(--fill); }
-
-    .avatar .pupil { fill: var(--pupil); opacity: 0; animation: fadeInFill 1s var(--ease) 2.2s forwards; }
-    .avatar .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite; }
+    .avatar .pupil { fill: var(--pupil); opacity: 0; animation: fadeInFill 1s var(--ease) 3s forwards; }
+    .avatar .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite 4s; }
 
     #head { transform-box: view-box; transform-origin: 200px 360px; }
 
