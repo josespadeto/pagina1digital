@@ -9,7 +9,7 @@
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
   
-  <!-- Open Graph (Fallback para imagem do portfólio) -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pinnacle | Sites Rápidos, Seguros e Estáveis">
   <meta property="og:description" content="Sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio, sem dores de cabeça.">
@@ -20,7 +20,6 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- QA: Adicionado display=swap para performance LCP -->
   <link href="https://fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
   <script>
@@ -300,6 +299,32 @@
       opacity: 0.7;
     }
 
+    /* NOVA SEÇÃO DE AUDITORIA */
+    .audit-form {
+      display: flex;
+      gap: 12px;
+      margin-top: 28px;
+      max-width: 500px;
+      flex-wrap: wrap;
+    }
+    
+    .audit-input {
+      flex: 1;
+      min-width: 250px;
+      padding: 14px 16px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+    
+    .audit-note {
+      font-size: 0.8rem;
+      opacity: 0.6;
+      margin-top: 12px;
+    }
+
     .faq { margin-top: 40px; max-width: 800px; }
     .faq-item { border-bottom: 1px solid var(--card-border); }
     .faq-item:first-child { border-top: 1px solid var(--card-border); }
@@ -546,6 +571,31 @@
       </div>
     </section>
 
+    <!-- SEÇÃO DE AUDITORIA -->
+    <section class="section" id="auditoria">
+      <h2 class="h2">Seu site está no padrão Pinnacle?<span class="dot">.</span></h2>
+      <p class="section__lede">Digite a URL do seu site atual e veja a nota de performance, SEO e acessibilidade diretamente no Google PageSpeed Insights.</p>
+      
+      <div class="audit-form">
+        <input 
+          type="url" 
+          id="siteUrl" 
+          placeholder="https://seu-site.com.br" 
+          class="audit-input"
+          aria-label="URL do site para análise"
+        >
+        <button 
+          type="button" 
+          onclick="analisarSite()" 
+          class="btn btn--lg"
+          style="background: var(--line); color: var(--on-line); border: none;"
+        >
+          Analisar
+        </button>
+      </div>
+      <p class="audit-note">Análise fornecida pelo Google PageSpeed Insights.</p>
+    </section>
+
     <section class="section" id="faq">
       <h2 class="h2">Perguntas Frequentes<span class="dot">.</span></h2>
       <div class="faq">
@@ -567,9 +617,11 @@
     <section class="section" id="contato">
       <h2 class="h2">Vamos conversar<span class="dot">.</span></h2>
       <p class="section__lede">Tem um site para tirar do papel? Conte a ideia e eu respondo com os próximos passos.</p>
-      <div style="display:flex; gap:14px; margin-top:28px;">
+      <div style="display:flex; gap:14px; margin-top:28px; flex-wrap: wrap;">
         <!-- SUBSTITUA O NÚMERO ABAIXO PELO SEU WHATSAPP REAL -->
         <a class="btn btn--lg" href="https://wa.me/5561999998888?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Pinnacle." target="_blank" rel="noopener noreferrer">Chamar no WhatsApp</a>
+        <!-- E-MAIL ADICIONADO AQUI -->
+        <a class="btn btn--lg" style="background: transparent; border: 2px solid var(--line); color: var(--ink);" href="mailto:spadeto.vendas@gmail.com">Enviar e-mail</a>
       </div>
     </section>
   </main>
@@ -579,7 +631,6 @@
   </footer>
 
   <!-- SUBSTITUA O NÚMERO ABAIXO PELO SEU WHATSAPP REAL -->
-  <!-- QA: Adicionado title para acessibilidade de mouse -->
   <a href="https://wa.me/5561999998888?text=Ol%C3%A1%2C%20vim%20pelo%20site%20da%20Pinnacle." target="_blank" rel="noopener noreferrer" class="whatsapp-float" aria-label="Conversar no WhatsApp" title="Conversar no WhatsApp">
     <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
   </a>
@@ -673,6 +724,20 @@
         revealText.classList.add('is-visible');
       }
     })();
+
+    // Função de Auditoria
+    function analisarSite() {
+      var url = document.getElementById('siteUrl').value.trim();
+      if (!url) {
+        alert('Por favor, insira a URL do seu site.');
+        return;
+      }
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'https://' + url;
+      }
+      var psiUrl = 'https://pagespeed.web.dev/report?url=' + encodeURIComponent(url);
+      window.open(psiUrl, '_blank', 'noopener,noreferrer');
+    }
   </script>
 </body>
 </html>
