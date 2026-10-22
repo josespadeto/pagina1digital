@@ -37,7 +37,7 @@
     :root {
       --bg: #f4f9fc;
       --ink: #0f1b61;
-      --line: #7b22e6;
+      --line: #7b22e6; /* Roxo para destaque */
       --on-line: #ffffff;
       --fill: #aadcec;
       --skin: #f9e7d9;
@@ -79,31 +79,11 @@
     .skip-link { position: absolute; left: 12px; top: -80px; z-index: 200; background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 6px; font-family: var(--sans); transition: top .2s; }
     .skip-link:focus { top: 12px; }
 
-    /* HEADER COM LOGO E NOME */
     .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 18px var(--gutter); font-family: var(--sans); background: linear-gradient(var(--bg) 55%, transparent); }
     
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-    }
-    
-    .logo-icon {
-      width: 32px;
-      height: 32px;
-      fill: none;
-      stroke: var(--line);
-      stroke-width: 3;
-      stroke-linejoin: round;
-    }
-    
-    .logo-text {
-      font-weight: 800;
-      font-size: 1.3rem;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-    }
+    .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .logo-icon { width: 32px; height: 32px; fill: none; stroke: var(--line); stroke-width: 3; stroke-linejoin: round; }
+    .logo-text { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.03em; color: var(--ink); }
     
     .theme-toggle { background: none; border: none; cursor: pointer; color: var(--ink); padding: 10px; border-radius: 50%; display: grid; place-items: center; }
     .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -153,7 +133,11 @@
     @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 
     .section { max-width: var(--maxw); margin: 0 auto; padding: clamp(70px, 12vw, 150px) var(--gutter); position: relative; z-index: 1; }
-    .h2 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4.4rem); line-height: 1.1; margin: 0 0 1rem; }
+    
+    /* AQUI ESTÁ A MUDANÇA DA COR DO NOME PINNACLE NO TÍTULO */
+    .h2 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4.4rem); line-height: 1.1; margin: 0 0 1rem; color: var(--ink); }
+    .h2 span.brand-highlight { color: var(--line); }
+    
     .dot { color: var(--line); }
     .section__lede { max-width: 52ch; margin: 0; }
 
@@ -214,7 +198,6 @@
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
   <header class="site-header">
-    <!-- LOGO E NOME ATUALIZADOS -->
     <a href="#inicio" class="logo-container" aria-label="Pinnacle, voltar ao início">
       <svg class="logo-icon" viewBox="0 0 64 64">
         <polygon points="32,8 56,56 8,56"></polygon>
@@ -292,9 +275,11 @@
       </div>
     </section>
 
-    <!-- Seção de Valor -->
+    <!-- Seção de Valor com Revelação -->
     <section class="section" id="diferenciais">
-      <h2 class="h2">Por que escolher a Pinnacle<span class="dot">.</span></h2>
+      <!-- O TÍTULO COM A COR ROXA E A CLASSE PARA ANIMAÇÃO -->
+      <h2 class="h2"><span class="reveal-text">Por que escolher a <span class="brand-highlight">Pinnacle</span>.</span></h2>
+      
       <div class="bento-grid">
         <div class="bento-card large">
           <h3>Velocidade que Converte</h3>
@@ -374,37 +359,34 @@
       function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
       function write(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
 
+      // TEMA
       var themeBtn = document.getElementById('theme-toggle');
       function isDark() { return root.getAttribute('data-theme') === 'dark'; }
       function syncBtn() { themeBtn.setAttribute('aria-pressed', isDark() ? 'true' : 'false'); }
       syncBtn();
-
       themeBtn.addEventListener('click', function () {
         var next = isDark() ? 'light' : 'dark';
-        if (next === 'dark') {
-          root.setAttribute('data-theme', 'dark');
-        } else {
-          root.removeAttribute('data-theme');
-        }
+        if (next === 'dark') { root.setAttribute('data-theme', 'dark'); } 
+        else { root.removeAttribute('data-theme'); }
         write('theme', next);
         syncBtn();
       });
 
+      // LGPD
       var banner = document.getElementById('cookieBanner');
       var acceptBtn = document.getElementById('acceptCookiesBtn');
       var rejectBtn = document.getElementById('rejectCookiesBtn');
-      
       if (!read('cookies_accepted') && !read('cookies_rejected')) {
         setTimeout(function () { banner.hidden = false; }, 3000);
       }
       acceptBtn.addEventListener('click', function () { write('cookies_accepted', 'true'); banner.hidden = true; });
       rejectBtn.addEventListener('click', function () { write('cookies_rejected', 'true'); banner.hidden = true; });
 
+      // AVATAR
       var avatar = document.getElementById('avatar');
       var head = document.getElementById('head');
       var pupilL = document.getElementById('pupilL');
       var pupilR = document.getElementById('pupilR');
-
       if (avatar && head && !reduce) {
         var targetX = 0, targetY = 0, curX = 0, curY = 0, running = false;
         function clamp(v) { return Math.max(-1, Math.min(1, v)); }
@@ -415,11 +397,8 @@
           var p = 'translate(' + (curX * 4).toFixed(2) + 'px,' + (curY * 3).toFixed(2) + 'px)';
           pupilL.style.transform = p;
           pupilR.style.transform = p;
-          if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001) {
-            requestAnimationFrame(update);
-          } else {
-            running = false;
-          }
+          if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001) { requestAnimationFrame(update); } 
+          else { running = false; }
         }
         function kick() { if (!running) { running = true; requestAnimationFrame(update); } }
         window.addEventListener('pointermove', function (e) {
@@ -429,6 +408,22 @@
           kick();
         }, { passive: true });
         document.addEventListener('pointerleave', function () { targetX = 0; targetY = 0; kick(); });
+      }
+
+      // REVELAÇÃO DO TÍTULO (Efeito de Cortina)
+      var revealText = document.querySelector('.reveal-text');
+      if (revealText && !reduce) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.5 });
+        observer.observe(revealText);
+      } else if (revealText) {
+        revealText.classList.add('is-visible');
       }
     })();
   </script>
