@@ -6,8 +6,10 @@
   <title>Pinnacle | Sites Rápidos, Seguros e Estáveis</title>
   <meta name="description" content="Desenvolvimento de sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio. Sem mensalidades, foco em resultado.">
 
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+  <!-- Favicon na identidade da marca (triângulo), em vez do emoji genérico -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,8 56,56 8,56' fill='%23aadcec' stroke='%237b22e6' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E">
 
+  <!-- TODO: trocar og:image por uma imagem da própria Pinnacle (1200x630) hospedada no seu domínio; e adicionar <link rel="canonical"> e og:url quando o domínio estiver definido -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pinnacle | Sites Rápidos, Seguros e Estáveis">
   <meta property="og:description" content="Sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio, sem dores de cabeça.">
@@ -22,12 +24,24 @@
 
   <script>
     (function () {
+      var root = document.documentElement;
       try {
         var saved = localStorage.getItem('theme');
         if (saved === 'dark') {
-          document.documentElement.setAttribute('data-theme', 'dark');
+          root.setAttribute('data-theme', 'dark');
         } else if (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-          document.documentElement.setAttribute('data-theme', 'dark');
+          root.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) {}
+      // Animação de entrada: só liga se o usuário NÃO pediu movimento reduzido.
+      // Se o script principal falhar, o estado inicial "escondido" é desfeito em 3s
+      // (nada fica invisível para sempre).
+      try {
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('anim');
+          setTimeout(function () {
+            if (!root.classList.contains('ready')) root.classList.remove('anim');
+          }, 3000);
         }
       } catch (e) {}
     })();
@@ -61,9 +75,7 @@
       --muted: #5a6270;
       --badge-green: #e8f5e9;
       --badge-green-text: #2E7D32;
-
       --text-contrast: #000000;
-      --text-contrast-light: #ffffff;
 
       --serif: Georgia, "Times New Roman", serif;
       --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -81,11 +93,12 @@
       --badge-green: rgba(46, 125, 50, 0.18);
       --badge-green-text: #81c784;
       --text-contrast: #ffffff;
-      --text-contrast-light: #000000;
       color-scheme: dark;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
+    /* Sem isto, display:flex/inline-flex das classes anula o atributo [hidden] */
+    [hidden] { display: none !important; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 90px; }
     body {
       margin: 0; background: var(--bg); color: var(--ink);
@@ -98,6 +111,7 @@
     ul { list-style: none; margin: 0; padding: 0; }
     b { font-weight: 700; }
     :focus-visible { outline: 3px solid var(--line); outline-offset: 4px; border-radius: 4px; }
+    main:focus { outline: none; }
 
     .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
@@ -108,6 +122,7 @@
 
     .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
     .logo-icon { width: 32px; height: 32px; fill: none; stroke: var(--line); stroke-width: 3; stroke-linejoin: round; }
+    .logo-icon .logo-fill { fill: var(--fill); }
     .logo-text { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.03em; color: var(--ink); }
 
     .theme-toggle { background: none; border: none; cursor: pointer; color: var(--ink); padding: 10px; border-radius: 50%; display: grid; place-items: center; }
@@ -116,51 +131,89 @@
     :root[data-theme="dark"] .theme-toggle .sun { display: block; }
     :root[data-theme="dark"] .theme-toggle .moon { display: none; }
 
-    .btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 999px; background: var(--fill); color: var(--ink); font: 700 .75rem/1 var(--sans); letter-spacing: .15em; text-transform: uppercase; border: 0; cursor: pointer; transition: transform .3s, background .3s, color .3s; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 12px 24px; border-radius: 999px; background: var(--fill); color: var(--ink); font: 700 .75rem/1 var(--sans); letter-spacing: .15em; text-transform: uppercase; border: 0; cursor: pointer; transition: transform .3s, background .3s, color .3s; }
     .btn:hover { background: var(--line); color: var(--on-line); transform: translateY(-2px); }
     .btn--lg { padding: 16px 30px; font-size: .8rem; }
+    .btn--accent { background: var(--line); color: var(--on-line); }
+    .btn--outline { background: transparent; border: 2px solid var(--line); color: var(--ink); }
 
+    /* ================= HERO ================= */
     .hero { position: relative; min-height: 100svh; max-width: var(--maxw); margin: 0 auto; padding: 140px var(--gutter) 80px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(40px, 6vw, 80px); }
 
     .hero-backdrop { position: absolute; top: 15%; bottom: 15%; left: 25%; right: 5%; background: repeating-linear-gradient(135deg, var(--stripe-color) 0 2px, transparent 2px 10px); z-index: 0; pointer-events: none; }
 
     .hero__text { position: relative; z-index: 1; }
 
-    .hero__title { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem); line-height: 1.15; margin: 0 0 1.5rem; animation: fadeInUp 1s var(--ease) both; font-weight: 400; letter-spacing: -0.02em; }
+    .hero__title { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem); line-height: 1.15; margin: 0 0 1.5rem; font-weight: 400; letter-spacing: -0.02em; }
     .hero__title b { font-weight: 700; color: var(--ink); }
 
-    .hero__lede { max-width: 45ch; font-size: clamp(1.05rem, 1rem + .4vw, 1.25rem); line-height: 1.6; margin: 0 0 2rem; animation: fadeInUp 1s var(--ease) 0.2s both; opacity: 0.9; font-weight: 400; }
+    .hero__lede { max-width: 45ch; font-size: clamp(1.05rem, 1rem + .4vw, 1.25rem); line-height: 1.6; margin: 0 0 2rem; font-weight: 400; }
 
-    .hero__cta { display: flex; gap: 14px; flex-wrap: wrap; animation: fadeInUp 1s var(--ease) 0.4s both; }
+    .hero__cta { display: flex; gap: 14px; flex-wrap: wrap; }
 
     .stage { position: relative; z-index: 1; display: grid; place-items: center; aspect-ratio: 1 / 1.05; }
 
     .avatar-shadow { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); width: 60%; height: 10%; background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, transparent 70%); filter: blur(8px); z-index: -1; }
 
+    /* ---------- Avatar: aparência base (sem animação) ---------- */
     .avatar { position: relative; width: min(100%, 420px); height: auto; overflow: visible; }
-
-    .avatar .st { stroke: var(--line); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; fill: none; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawLine 2s var(--ease) 0.8s forwards; }
-    
-    .avatar .f, .avatar .b { opacity: 0; animation: fadeInFill 1s var(--ease) 2s forwards; }
+    .avatar .st { stroke: var(--line); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; fill: none; }
     .avatar .b { fill: var(--skin); }
     .avatar .f { fill: var(--fill); }
-    
-    .avatar .pupil { fill: var(--pupil); opacity: 0; animation: fadeInFill 1s var(--ease) 2.8s forwards; }
-    
-    .avatar .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite 3s; }
+    /* Estes dois vinham com stroke-width="4" no atributo, mas a regra .st (CSS) anulava o atributo.
+       Aqui a sobrancelha volta a ter a espessura pretendida. */
+    .avatar .brow { stroke-width: 4; }
+    .avatar .dots { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 1 4; stroke-linecap: round; }
+    .avatar .pupil { fill: var(--pupil); }
 
-    #head { transform-box: view-box; transform-origin: 200px 360px; }
+    .avatar .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite var(--blink-delay, 3s); }
+    #head { transform-box: view-box; transform-origin: 200px 360px; will-change: transform; }
 
-    @keyframes drawLine { to { stroke-dashoffset: 0; } }
-    @keyframes fadeInFill { to { opacity: 1; } }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .avatar .breath { animation: breathe 4s ease-in-out var(--end, 0s) infinite; transform-box: view-box; transform-origin: 200px 340px; }
+    .avatar .breath-slow { animation: breathe-slow 4s ease-in-out var(--end, 0s) infinite; transform-box: view-box; transform-origin: 200px 480px; }
 
-    .avatar .breath { animation: breathe 4s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 340px; }
-    .avatar .breath-slow { animation: breathe-slow 4s ease-in-out infinite; transform-box: view-box; transform-origin: 200px 480px; }
     @keyframes breathe { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.01); } }
     @keyframes breathe-slow { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.01); } }
     @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 
+    /* ================= ENTRADA (só com .anim) =================
+       .anim  = movimento permitido (definido no <head>)
+       .ready = JS já preparou comprimentos dos traços e palavras */
+    @keyframes drawLine { to { stroke-dashoffset: 0; } }
+    @keyframes fillIn { to { fill-opacity: 1; } }
+    @keyframes fadeInFill { to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes wordIn {
+      from { opacity: 0; transform: translateY(.45em); filter: blur(6px); }
+      to   { opacity: 1; transform: none; filter: none; }
+    }
+
+    /* Texto: palavra por palavra */
+    .anim .w { display: inline-block; opacity: 0; animation: wordIn .7s var(--ease) calc(.15s + var(--i, 0) * 70ms) forwards; }
+    .anim .hero__lede { opacity: 0; animation: fadeInUp .9s var(--ease) var(--lede-delay, 1.2s) forwards; }
+    .anim .hero__cta  { opacity: 0; animation: fadeInUp .9s var(--ease) var(--cta-delay, 1.6s) forwards; }
+
+    /* Avatar: traço sendo desenhado, depois preenchimento */
+    .anim .avatar { visibility: hidden; }
+    .anim.ready .avatar { visibility: visible; }
+
+    .anim.ready .avatar .st {
+      stroke-dasharray: var(--len);
+      stroke-dashoffset: var(--len);
+      animation: drawLine 1s var(--ease) var(--d, 0s) forwards;
+    }
+    .anim.ready .avatar .st.b,
+    .anim.ready .avatar .st.f {
+      fill-opacity: 0;
+      animation: drawLine 1s var(--ease) var(--d, 0s) forwards,
+                 fillIn .9s ease calc(var(--d, 0s) + .7s) forwards;
+    }
+    .anim.ready .avatar .fx,
+    .anim.ready .avatar .pupil { opacity: 0; animation: fadeInFill .8s ease var(--end, 3s) forwards; }
+
+    .anim .whatsapp-float { opacity: 0; animation: fadeInFill 1s ease 3.4s forwards; }
+
+    /* ================= SEÇÕES ================= */
     .section { max-width: var(--maxw); margin: 0 auto; padding: clamp(70px, 12vw, 150px) var(--gutter); position: relative; z-index: 1; }
 
     .h2 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4.4rem); line-height: 1.1; margin: 0 0 1rem; color: var(--ink); }
@@ -201,7 +254,10 @@
     .author-info span { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
 
     .audit-form { display: flex; gap: 12px; margin-top: 28px; max-width: 500px; flex-wrap: wrap; }
-    .audit-input { flex: 1; min-width: 250px; padding: 14px 16px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--bg); color: var(--ink); font-family: var(--sans); }
+    /* font-size 1rem evita o zoom automático do iOS ao focar o campo */
+    .audit-input { flex: 1; min-width: 250px; min-height: 48px; padding: 14px 16px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 1rem; }
+    .audit-input[aria-invalid="true"] { border-color: #b00020; }
+    :root[data-theme="dark"] .audit-input[aria-invalid="true"] { border-color: #ff8a95; }
     .audit-note { font-size: 0.8rem; color: var(--muted); margin-top: 12px; }
     .audit-error { color: #b00020; font-size: 0.85rem; margin-top: 8px; font-family: var(--sans); }
     :root[data-theme="dark"] .audit-error { color: #ff8a95; }
@@ -218,12 +274,18 @@
     .faq-content { padding-bottom: 1.5rem; color: var(--muted); }
     .faq-content p { margin-top: 0; margin-bottom: 10px; }
 
-    .whatsapp-float { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; background-color: #128c4a; color: #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(0, 0, 0, .25); transition: transform .3s ease; opacity: 0; animation: fadeInFill 1s ease 2.5s forwards; }
+    .contact-actions { display: flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+
+    .whatsapp-float { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; background-color: #128c4a; color: #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(0, 0, 0, .25); transition: transform .3s ease; }
     .whatsapp-float:hover { transform: scale(1.1); }
     .whatsapp-float svg { width: 2rem; height: 2rem; fill: currentColor; }
 
-    footer { text-align:center; padding:40px var(--gutter); border-top:1px solid var(--card-border); font-family:var(--sans); font-size:.9rem; color: var(--text-contrast); }
+    footer { text-align: center; padding: 40px var(--gutter); border-top: 1px solid var(--card-border); font-family: var(--sans); font-size: .9rem; color: var(--text-contrast); }
     footer p + p { margin-top: 8px; font-size: .82rem; opacity: .8; }
+
+    @media (max-width: 1100px) {
+      .process-grid { grid-template-columns: repeat(2, 1fr); }
+    }
 
     @media (max-width: 860px) {
       .hero { grid-template-columns: 1fr; text-align: center; padding-top: 120px; min-height: auto; gap: 40px; }
@@ -251,9 +313,6 @@
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
-      .avatar .st { stroke-dashoffset: 0; }
-      .avatar .f, .avatar .b, .avatar .pupil { opacity: 1; }
-      .whatsapp-float { opacity: 1; }
     }
   </style>
 </head>
@@ -265,7 +324,7 @@
     <a href="#inicio" class="logo-container" aria-label="Pinnacle, voltar ao início">
       <svg class="logo-icon" viewBox="0 0 64 64" aria-hidden="true">
         <polygon points="32,8 56,56 8,56"></polygon>
-        <polygon points="32,8 32,56 8,56" fill="var(--fill)"></polygon>
+        <polygon class="logo-fill" points="32,8 32,56 8,56"></polygon>
       </svg>
       <span class="logo-text">Pinnacle</span>
     </a>
@@ -300,12 +359,15 @@
 
         <svg class="avatar" id="avatar" viewBox="0 0 400 500" role="img" aria-label="Ilustração de José">
           <defs>
-            <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="8" stdDeviation="6" flood-opacity="0.15"/>
-            </filter>
-            <filter id="blur-shadow">
-              <feGaussianBlur stdDeviation="4"/>
-            </filter>
+            <!-- Sombras suaves por gradiente (sem filter SVG: mais leve para animar) -->
+            <linearGradient id="shadeGrad" x1="1" y1="0" x2="0" y2="0">
+              <stop offset="0" stop-color="#0f1b61" stop-opacity=".14"/>
+              <stop offset="1" stop-color="#0f1b61" stop-opacity="0"/>
+            </linearGradient>
+            <radialGradient id="hiGrad">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".3"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
           </defs>
 
           <g class="breath-slow">
@@ -314,30 +376,30 @@
             <path class="st" d="M160 394Q200 430 240 394"/>
           </g>
 
-          <g class="breath" filter="url(#drop-shadow)">
+          <g class="breath">
             <g id="head">
               <path class="st b" d="M105 230C105 125 295 125 295 230C295 315 250 360 200 360C150 360 105 315 105 230Z"/>
-              <path d="M220 130 C280 140 295 190 295 230 C295 315 250 360 200 360 C240 360 260 300 260 230 C260 180 240 150 220 130 Z" fill="rgba(15, 27, 97, 0.08)" filter="url(#blur-shadow)"/>
+              <path class="fx" d="M220 130 C280 140 295 190 295 230 C295 315 250 360 200 360 C240 360 260 300 260 230 C260 180 240 150 220 130 Z" fill="url(#shadeGrad)"/>
               <path class="st b" d="M105 240C90 240 85 255 90 270C95 285 105 290 110 285"/>
               <path class="st b" d="M295 240C310 240 315 255 310 270C305 285 295 290 290 285"/>
               <path class="st f" d="M 95 230 C 85 160 110 100 150 95 C 170 70 210 70 230 90 C 260 85 285 110 300 150 C 310 180 305 210 300 230 C 290 200 270 180 240 175 C 210 170 180 195 150 190 C 120 185 100 210 95 230 Z"/>
               <path class="st f" d="M 150 95 L 160 110 L 170 90 L 185 105 L 200 85 L 215 105 L 230 90 Z"/>
               <path class="st f" d="M 240 95 L 250 110 L 265 100 L 280 120 Z"/>
-              <path d="M 120 160 Q 150 120 180 110 Q 150 150 130 170 Z" fill="rgba(255, 255, 255, 0.15)" filter="url(#blur-shadow)"/>
+              <path class="fx" d="M 120 160 Q 150 120 180 110 Q 150 150 130 170 Z" fill="url(#hiGrad)"/>
               <rect class="st" x="135" y="235" width="55" height="40" rx="6"/>
               <rect class="st" x="210" y="235" width="55" height="40" rx="6"/>
               <path class="st" d="M190 250 Q200 240 210 250"/>
               <path class="st" d="M105 245 L135 245"/>
               <path class="st" d="M265 245 L295 245"/>
-              <path class="st" d="M145 220 Q160 210 175 220" stroke-width="4"/>
-              <path class="st" d="M225 220 Q240 210 255 220" stroke-width="4"/>
-              
+              <path class="st brow" d="M145 220 Q160 210 175 220"/>
+              <path class="st brow" d="M225 220 Q240 210 255 220"/>
+
               <g class="eye"><circle class="st b" cx="162.5" cy="255" r="12"/><circle class="pupil" id="pupilL" cx="162.5" cy="255" r="5"/></g>
               <g class="eye"><circle class="st b" cx="237.5" cy="255" r="12"/><circle class="pupil" id="pupilR" cx="237.5" cy="255" r="5"/></g>
 
               <path class="st" d="M200 265 L195 295 Q200 300 205 295"/>
               <path class="st" d="M175 325 Q200 335 225 320"/>
-              <path class="st" d="M120 295 Q140 345 200 355 Q260 345 280 295" stroke-width="1.5" stroke-dasharray="1 4" stroke-linecap="round"/>
+              <path class="dots fx" d="M120 295 Q140 345 200 355 Q260 345 280 295"/>
             </g>
           </g>
         </svg>
@@ -362,7 +424,7 @@
         </div>
         <div class="bento-card">
           <h3>Zero Mensalidade</h3>
-          <p>Você paga pelo projeto e não por "mensalidades de manutenção" para manter o site no ar. A hospedagem em serviços como o GitHub Pages é gratuita e confiável.</p>
+          <p>Você paga pelo projeto e não por "mensalidades de manutenção" para manter o site no ar. A hospedagem em plataformas como o Cloudflare Pages é gratuita para sites estáticos e confiável.</p>
         </div>
         <div class="bento-card">
           <h3>Foco no Resultado</h3>
@@ -377,7 +439,7 @@
 
       <div class="portfolio-showcase">
         <div class="portfolio-image-wrap">
-          <img src="https://rmcontarecantar.art.br/assets/images/hero.webp" alt="Captura de tela do site Contar e Cantar" loading="lazy" fetchpriority="high">
+          <img src="https://rmcontarecantar.art.br/assets/images/hero.webp" alt="Captura de tela do site Contar e Cantar" loading="lazy" decoding="async">
         </div>
         <div class="portfolio-content">
           <div class="portfolio-badge">
@@ -427,7 +489,7 @@
         <div class="testimonial-card">
           <p class="testimonial-text">"O José entregou um site que carrega instantaneamente. A diferença em relação ao nosso site antigo foi absurda."</p>
           <div class="testimonial-author">
-            <div class="author-avatar">R</div>
+            <div class="author-avatar" aria-hidden="true">R</div>
             <div class="author-info">
               <p class="author-name">Rosane Maia</p>
               <span>Curadora do Contar e Cantar</span>
@@ -446,15 +508,19 @@
         <input
           type="url"
           id="siteUrl"
+          name="url"
+          inputmode="url"
+          autocomplete="url"
+          autocapitalize="none"
+          spellcheck="false"
           placeholder="https://seu-site.com.br"
           class="audit-input"
+          aria-describedby="auditError auditNote"
         >
-        <button type="submit" class="btn btn--lg" style="background: var(--line); color: var(--on-line); border: none;">
-          Analisar
-        </button>
+        <button type="submit" class="btn btn--lg btn--accent">Analisar</button>
       </form>
-      <p class="audit-error" id="auditError" hidden></p>
-      <p class="audit-note">Análise fornecida pelo Google PageSpeed Insights.</p>
+      <p class="audit-error" id="auditError" role="alert" hidden></p>
+      <p class="audit-note" id="auditNote">Análise fornecida pelo Google PageSpeed Insights.</p>
       <p class="audit-promise">Quer a análise comentada? <a href="mailto:spadeto.vendas@gmail.com?subject=An%C3%A1lise%20Pinnacle">Me chame no e-mail</a>.</p>
     </section>
 
@@ -464,7 +530,7 @@
         <details class="faq-item">
           <summary>Preciso pagar alguma mensalidade de hospedagem?</summary>
           <div class="faq-content">
-            <p>Não. A hospedagem em serviços modernos como o Cloudflare Pages é gratuita e ilimitada para sites estáticos. O seu único custo anual será o registro do seu domínio próprio (ex: suaempresa.com.br), que fica no seu nome e custa cerca de R$ 40/ano.</p>
+            <p>Não. Para sites estáticos, a hospedagem no Cloudflare Pages é gratuita e não tem limite de tráfego. O seu único custo anual será o registro do seu domínio próprio (ex: suaempresa.com.br), que fica no seu nome e custa cerca de R$ 40/ano.</p>
             <p style="margin-top: 10px;"><strong>O que você está pagando então?</strong> Você não está pagando apenas por "um site", mas pela qualidade técnica, velocidade de carregamento, segurança estrutural (sem brechas de plugins) e um design focado em converter visitantes em clientes.</p>
           </div>
         </details>
@@ -488,9 +554,10 @@
     <section class="section" id="contato">
       <h2 class="h2">Vamos conversar<span class="dot">.</span></h2>
       <p class="section__lede">Tem um site para tirar do papel? Conte a ideia e eu respondo com os próximos passos.</p>
-      <div style="display:flex; gap:14px; margin-top:28px; flex-wrap: wrap;">
-        <a class="btn btn--lg" href="#" title="Em breve">Chamar no WhatsApp (em breve)</a>
-        <a class="btn btn--lg" style="background: transparent; border: 2px solid var(--line); color: var(--ink);" href="mailto:spadeto.vendas@gmail.com">Enviar e-mail</a>
+      <div class="contact-actions">
+        <!-- Fica oculto até você preencher WHATSAPP_NUMBER no script (evita botão morto) -->
+        <a class="btn btn--lg" id="waContact" href="#" target="_blank" rel="noopener" hidden>Chamar no WhatsApp</a>
+        <a class="btn btn--lg btn--outline" href="mailto:spadeto.vendas@gmail.com">Enviar e-mail</a>
       </div>
     </section>
   </main>
@@ -500,85 +567,212 @@
     <p>Este site não usa cookies de rastreamento. Apenas preferências locais (tema) são salvas no seu navegador.</p>
   </footer>
 
-  <a href="#" class="whatsapp-float" aria-label="Conversar no WhatsApp (em breve)" title="Conversar no WhatsApp (em breve)">
+  <a href="#" class="whatsapp-float" id="waFloat" aria-label="Conversar no WhatsApp" target="_blank" rel="noopener" hidden>
     <svg viewBox="0 0 448 512" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3 18.6-68.1-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
   </a>
 
   <script>
     (function () {
+      'use strict';
+
+      /* ===== CONFIGURAÇÃO ===== */
+      // Número com DDI+DDD, só dígitos. Ex.: '5561999999999'. Vazio = botões de WhatsApp ficam ocultos.
+      var WHATSAPP_NUMBER = '';
+      var WHATSAPP_TEXT = 'Olá! Vim pelo site da Pinnacle e gostaria de um orçamento.';
+
       var root = document.documentElement;
       var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
       function write(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
 
+      /* ===== TEMA ===== */
       var themeBtn = document.getElementById('theme-toggle');
       function isDark() { return root.getAttribute('data-theme') === 'dark'; }
       function syncBtn() { themeBtn.setAttribute('aria-pressed', isDark() ? 'true' : 'false'); }
       syncBtn();
-
       themeBtn.addEventListener('click', function () {
         var next = isDark() ? 'light' : 'dark';
-        if (next === 'dark') {
-          root.setAttribute('data-theme', 'dark');
-        } else {
-          root.removeAttribute('data-theme');
-        }
+        if (next === 'dark') root.setAttribute('data-theme', 'dark');
+        else root.removeAttribute('data-theme');
         write('theme', next);
         syncBtn();
       });
 
+      /* ===== WHATSAPP (só aparece com número configurado) ===== */
+      if (/^\d{10,15}$/.test(WHATSAPP_NUMBER)) {
+        var waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_TEXT);
+        ['waFloat', 'waContact'].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) { el.href = waLink; el.hidden = false; }
+        });
+      }
+
+      /* ===== ENTRADA: texto palavra por palavra + avatar desenhado ===== */
       var avatar = document.getElementById('avatar');
       var head = document.getElementById('head');
       var pupilL = document.getElementById('pupilL');
       var pupilR = document.getElementById('pupilR');
+      var introEnd = 0; // segundos até o avatar terminar de ser desenhado
 
-      if (avatar && head && !reduce) {
-        var targetX = 0, targetY = 0, curX = 0, curY = 0, running = false;
-        function clamp(v) { return Math.max(-1, Math.min(1, v)); }
-        function update() {
-          curX += (targetX - curX) * 0.1;
-          curY += (targetY - curY) * 0.1;
-          head.style.transform = 'translate(' + (curX * 6).toFixed(2) + 'px,' + (curY * 4).toFixed(2) + 'px) rotate(' + (curX * 3).toFixed(2) + 'deg)';
-          var p = 'translate(' + (curX * 4).toFixed(2) + 'px,' + (curY * 3).toFixed(2) + 'px)';
-          pupilL.style.transform = p;
-          pupilR.style.transform = p;
-          if (Math.abs(targetX - curX) > 0.001 || Math.abs(targetY - curY) > 0.001) {
-            requestAnimationFrame(update);
-          } else {
-            running = false;
+      // Envolve cada palavra num <span class="w">, preservando <b> e espaços.
+      function splitWords(node, state) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+          if (n.nodeType === 3) {
+            var frag = document.createDocumentFragment();
+            n.nodeValue.split(/(\s+)/).forEach(function (part) {
+              if (!part) return;
+              if (/^\s+$/.test(part)) {
+                frag.appendChild(document.createTextNode(part));
+              } else {
+                var s = document.createElement('span');
+                s.className = 'w';
+                s.style.setProperty('--i', state.i++);
+                s.textContent = part;
+                frag.appendChild(s);
+              }
+            });
+            node.replaceChild(frag, n);
+          } else if (n.nodeType === 1) {
+            splitWords(n, state);
           }
-        }
-        function kick() { if (!running) { running = true; requestAnimationFrame(update); } }
-        window.addEventListener('pointermove', function (e) {
-          var r = avatar.getBoundingClientRect();
-          targetX = clamp((e.clientX - (r.left + r.width / 2)) / (window.innerWidth / 2));
-          targetY = clamp((e.clientY - (r.top + r.height * 0.4)) / (window.innerHeight / 2));
-          kick();
-        }, { passive: true });
-        document.addEventListener('pointerleave', function () { targetX = 0; targetY = 0; kick(); });
+        });
       }
 
+      if (root.classList.contains('anim')) {
+        try {
+          // Texto
+          var title = document.querySelector('.hero__title');
+          var st = { i: 0 };
+          splitWords(title, st);
+          var textEnd = 0.15 + st.i * 0.07 + 0.2;
+          root.style.setProperty('--lede-delay', textEnd.toFixed(2) + 's');
+          root.style.setProperty('--cta-delay', (textEnd + 0.4).toFixed(2) + 's');
+
+          // Avatar: mede cada traço e escalona o desenho
+          var strokes = avatar.querySelectorAll('.st');
+          var lastDelay = 0;
+          Array.prototype.forEach.call(strokes, function (el, i) {
+            var len = Math.ceil(el.getTotalLength()) + 2;
+            var delay = 0.45 + i * 0.06;
+            el.style.setProperty('--len', len);
+            el.style.setProperty('--d', delay.toFixed(2) + 's');
+            lastDelay = delay;
+          });
+          introEnd = lastDelay + 1.1;
+          avatar.style.setProperty('--end', introEnd.toFixed(2) + 's');
+          avatar.style.setProperty('--blink-delay', (introEnd + 1.2).toFixed(2) + 's');
+
+          root.classList.add('ready');
+        } catch (err) {
+          root.classList.remove('anim'); // qualquer falha: mostra tudo normalmente
+        }
+      }
+
+      /* ===== OLHOS E CABEÇA SEGUEM O PONTEIRO (+ olhar ocioso) ===== */
+      if (avatar && head && pupilL && pupilR && !reduce) {
+        var live = false, visible = true, lastMove = 0, rect = null, running = false;
+        var tHX = 0, tHY = 0;   // alvo (-1..1)
+        var hX = 0, hY = 0;     // cabeça (lenta)
+        var pX = 0, pY = 0;     // pupilas (rápidas: os olhos "lideram")
+
+        function clamp(v) { return Math.max(-1, Math.min(1, v)); }
+
+        function render() {
+          hX += (tHX - hX) * 0.07; hY += (tHY - hY) * 0.07;
+          pX += (tHX - pX) * 0.22; pY += (tHY - pY) * 0.22;
+          head.style.transform = 'translate(' + (hX * 6).toFixed(2) + 'px,' + (hY * 4).toFixed(2) + 'px) rotate(' + (hX * 3).toFixed(2) + 'deg)';
+          var p = 'translate(' + (pX * 5).toFixed(2) + 'px,' + (pY * 3.5).toFixed(2) + 'px)';
+          pupilL.style.transform = p;
+          pupilR.style.transform = p;
+          var moving = Math.abs(tHX - hX) > 0.002 || Math.abs(tHY - hY) > 0.002 ||
+                       Math.abs(tHX - pX) > 0.002 || Math.abs(tHY - pY) > 0.002;
+          if (moving) requestAnimationFrame(render); else running = false;
+        }
+        function look(x, y) {
+          tHX = x; tHY = y;
+          if (!running) { running = true; requestAnimationFrame(render); }
+        }
+
+        function onPointer(e) {
+          if (!live || !visible) return;
+          if (!rect) rect = avatar.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height * 0.5;
+          // Alcance proporcional ao tamanho do avatar: o olhar chega ao limite
+          // quando o ponteiro está ~1,3 largura de distância, em qualquer lado da tela.
+          look(clamp((e.clientX - cx) / (rect.width * 1.3)),
+               clamp((e.clientY - cy) / (rect.height * 0.9)));
+          lastMove = Date.now();
+        }
+
+        window.addEventListener('pointermove', onPointer, { passive: true });
+        window.addEventListener('pointerdown', onPointer, { passive: true }); // toque
+        window.addEventListener('scroll', function () { rect = null; }, { passive: true });
+        window.addEventListener('resize', function () { rect = null; });
+        root.addEventListener('mouseleave', function () { if (live) look(0, 0); });
+
+        if ('IntersectionObserver' in window) {
+          new IntersectionObserver(function (entries) {
+            visible = entries[0].isIntersecting;
+          }).observe(avatar);
+        }
+
+        // Olhar ocioso: se ninguém mexe o mouse por um tempo, ele "olha em volta".
+        function idle() {
+          if (live && visible && !document.hidden && Date.now() - lastMove > 2500) {
+            look((Math.random() * 2 - 1) * 0.7, (Math.random() * 2 - 1) * 0.4);
+          }
+          setTimeout(idle, 1800 + Math.random() * 2600);
+        }
+
+        // Só "acorda" quando o desenho termina.
+        setTimeout(function () { live = true; idle(); }, Math.round(introEnd * 1000) + 100);
+      }
+
+      /* ===== AUDITORIA (PageSpeed) ===== */
       var auditForm = document.getElementById('auditForm');
       var auditError = document.getElementById('auditError');
+      var urlInput = document.getElementById('siteUrl');
+
+      function normalizeUrl(raw) {
+        var v = raw.trim();
+        if (!v || /\s/.test(v)) return null;
+        if (!/^https?:\/\//i.test(v)) v = 'https://' + v;
+        try {
+          var u = new URL(v);
+          if (u.protocol !== 'http:' && u.protocol !== 'https:') return null;
+          if (u.hostname.indexOf('.') < 1) return null;
+          return u.href;
+        } catch (e) { return null; }
+      }
+      function showError(msg) {
+        auditError.textContent = msg;
+        auditError.hidden = false;
+        urlInput.setAttribute('aria-invalid', 'true');
+        urlInput.focus();
+      }
+
       if (auditForm) {
-        auditForm.addEventListener('submit', function(e) {
+        auditForm.addEventListener('submit', function (e) {
           e.preventDefault();
-          var urlInput = document.getElementById('siteUrl');
-          var url = urlInput.value.trim();
-          
-          if (!url) {
-            auditError.textContent = 'Por favor, insira a URL do seu site.';
-            auditError.hidden = false;
-            return;
-          }
+          var raw = urlInput.value;
+          if (!raw.trim()) { showError('Por favor, insira a URL do seu site.'); return; }
+          var url = normalizeUrl(raw);
+          if (!url) { showError('Esse endereço não parece válido. Exemplo: https://seu-site.com.br'); return; }
           auditError.hidden = true;
-          
-          if (!url.startsWith('http://') && !url.startsWith('https://')) {
-            url = 'https://' + url;
-          }
-          var psiUrl = 'https://pagespeed.web.dev/report?url=' + encodeURIComponent(url);
-          window.open(psiUrl, '_blank', 'noopener,noreferrer');
+          urlInput.removeAttribute('aria-invalid');
+          var a = document.createElement('a');
+          a.href = 'https://pagespeed.web.dev/report?url=' + encodeURIComponent(url);
+          a.target = '_blank';
+          a.rel = 'noopener noreferrer';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        });
+        urlInput.addEventListener('input', function () {
+          auditError.hidden = true;
+          urlInput.removeAttribute('aria-invalid');
         });
       }
     })();
