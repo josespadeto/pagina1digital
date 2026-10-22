@@ -33,16 +33,20 @@
           root.setAttribute('data-theme', 'dark');
         }
       } catch (e) {}
-      // Animação de entrada: só liga se o usuário NÃO pediu movimento reduzido.
-      // Se o script principal falhar, o estado inicial "escondido" é desfeito em 3s
-      // (nada fica invisível para sempre).
+      // Introdução (desenho do avatar + texto) roda SEMPRE, uma única vez.
+      // Se o sistema operacional pede "reduzir movimento", entra o modo "calm":
+      // mantém a introdução (só opacidade/traço, sem deslocamentos) e desliga
+      // apenas os movimentos contínuos (respiração, piscar, cabeça, olhar ocioso).
+      // Use ?full=1 na URL para forçar o modo completo em qualquer máquina.
+      // Se o script principal falhar, o estado "escondido" é desfeito em 3s.
       try {
-        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-          root.classList.add('anim');
-          setTimeout(function () {
-            if (!root.classList.contains('ready')) root.classList.remove('anim');
-          }, 3000);
+        root.classList.add('anim');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !/[?&]full=1/.test(location.search)) {
+          root.classList.add('calm');
         }
+        setTimeout(function () {
+          if (!root.classList.contains('ready')) root.classList.remove('anim');
+        }, 3000);
       } catch (e) {}
     })();
   </script>
@@ -164,7 +168,14 @@
        Aqui a sobrancelha volta a ter a espessura pretendida. */
     .avatar .brow { stroke-width: 4; }
     .avatar .dots { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 1 4; stroke-linecap: round; }
-    .avatar .pupil { fill: var(--pupil); }
+    .avatar .thin { stroke-width: 1.6; stroke-opacity: .55; }
+    .avatar .iris { fill: #4b5fd6; }
+    .avatar .core { fill: var(--pupil); }
+    .avatar .glint { fill: #ffffff; }
+    .avatar .lens { fill: rgba(255, 255, 255, .2); }
+    .avatar .glare { fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-opacity: .7; }
+    .avatar .thin-glare { stroke-width: 1.4; }
+    .avatar .fringe { fill: none; stroke: rgba(15, 27, 97, .08); stroke-width: 8; stroke-linecap: round; }
 
     .avatar .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite var(--blink-delay, 3s); }
     #head { transform-box: view-box; transform-origin: 200px 360px; will-change: transform; }
@@ -310,9 +321,15 @@
       .hero__lede { font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); }
     }
 
+    /* Modo calm (movimento reduzido no sistema): a introdução continua, mas só com
+       fade e traço; sem deslocamento, desfoque, respiração, piscar ou movimento de cabeça. */
+    @keyframes wordFade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOnly { to { opacity: 1; } }
+    .calm .w { transform: none; filter: none; animation-name: wordFade; }
+    .calm .hero__lede, .calm .hero__cta { animation-name: fadeOnly; }
+    .calm .avatar .breath, .calm .avatar .breath-slow, .calm .avatar .eye { animation: none; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
-      *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
     }
   </style>
 </head>
@@ -359,7 +376,7 @@
 
         <svg class="avatar" id="avatar" viewBox="0 0 400 500" role="img" aria-label="Ilustração de José">
           <defs>
-            <!-- Sombras suaves por gradiente (sem filter SVG: mais leve para animar) -->
+            <!-- Sombras e luzes suaves por gradiente (sem filter SVG: mais leve para animar) -->
             <linearGradient id="shadeGrad" x1="1" y1="0" x2="0" y2="0">
               <stop offset="0" stop-color="#0f1b61" stop-opacity=".14"/>
               <stop offset="1" stop-color="#0f1b61" stop-opacity="0"/>
@@ -368,24 +385,48 @@
               <stop offset="0" stop-color="#ffffff" stop-opacity=".3"/>
               <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
             </radialGradient>
+            <radialGradient id="blushGrad">
+              <stop offset="0" stop-color="#f08a8a" stop-opacity=".4"/>
+              <stop offset="1" stop-color="#f08a8a" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="neckShade">
+              <stop offset="0" stop-color="#0f1b61" stop-opacity=".14"/>
+              <stop offset="1" stop-color="#0f1b61" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="shirtShade" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#0f1b61" stop-opacity="0"/>
+              <stop offset="1" stop-color="#0f1b61" stop-opacity=".16"/>
+            </linearGradient>
           </defs>
 
           <g class="breath-slow">
             <path class="st b" d="M175 320V390Q200 410 225 390V320Z"/>
+            <ellipse class="fx" cx="200" cy="368" rx="25" ry="10" fill="url(#neckShade)"/>
             <path class="st f" d="M36 500C36 420 108 390 200 390C292 390 364 420 364 500Z"/>
+            <path class="fx" d="M36 500C36 420 108 390 200 390C292 390 364 420 364 500Z" fill="url(#shirtShade)"/>
             <path class="st" d="M160 394Q200 430 240 394"/>
+            <path class="st thin" d="M168 398Q200 425 232 398"/>
           </g>
 
           <g class="breath">
             <g id="head">
               <path class="st b" d="M105 230C105 125 295 125 295 230C295 315 250 360 200 360C150 360 105 315 105 230Z"/>
               <path class="fx" d="M220 130 C280 140 295 190 295 230 C295 315 250 360 200 360 C240 360 260 300 260 230 C260 180 240 150 220 130 Z" fill="url(#shadeGrad)"/>
+              <ellipse class="fx" cx="152" cy="300" rx="18" ry="10" fill="url(#blushGrad)"/>
+              <ellipse class="fx" cx="248" cy="300" rx="18" ry="10" fill="url(#blushGrad)"/>
               <path class="st b" d="M105 240C90 240 85 255 90 270C95 285 105 290 110 285"/>
               <path class="st b" d="M295 240C310 240 315 255 310 270C305 285 295 290 290 285"/>
+              <path class="st thin" d="M100 252C96 256 96 264 100 270"/>
+              <path class="st thin" d="M300 252C304 256 304 264 300 270"/>
               <path class="st f" d="M 95 230 C 85 160 110 100 150 95 C 170 70 210 70 230 90 C 260 85 285 110 300 150 C 310 180 305 210 300 230 C 290 200 270 180 240 175 C 210 170 180 195 150 190 C 120 185 100 210 95 230 Z"/>
               <path class="st f" d="M 150 95 L 160 110 L 170 90 L 185 105 L 200 85 L 215 105 L 230 90 Z"/>
               <path class="st f" d="M 240 95 L 250 110 L 265 100 L 280 120 Z"/>
+              <path class="st thin" d="M 140 100 C 118 130 108 165 108 196"/>
+              <path class="st thin" d="M 168 94 C 148 120 134 148 128 178"/>
+              <path class="st thin" d="M 222 90 C 240 108 252 132 256 160"/>
+              <path class="st thin" d="M 250 94 C 272 116 285 150 288 190"/>
               <path class="fx" d="M 120 160 Q 150 120 180 110 Q 150 150 130 170 Z" fill="url(#hiGrad)"/>
+              <path class="fx fringe" d="M 108 232 C 112 214 126 192 150 197 C 180 202 210 177 240 182 C 268 187 286 202 292 226"/>
               <rect class="st" x="135" y="235" width="55" height="40" rx="6"/>
               <rect class="st" x="210" y="235" width="55" height="40" rx="6"/>
               <path class="st" d="M190 250 Q200 240 210 250"/>
@@ -394,8 +435,29 @@
               <path class="st brow" d="M145 220 Q160 210 175 220"/>
               <path class="st brow" d="M225 220 Q240 210 255 220"/>
 
-              <g class="eye"><circle class="st b" cx="162.5" cy="255" r="12"/><circle class="pupil" id="pupilL" cx="162.5" cy="255" r="5"/></g>
-              <g class="eye"><circle class="st b" cx="237.5" cy="255" r="12"/><circle class="pupil" id="pupilR" cx="237.5" cy="255" r="5"/></g>
+              <g class="eye">
+                <circle class="st b" cx="162.5" cy="255" r="12"/>
+                <g class="pupil" id="pupilL">
+                  <circle class="iris" cx="162.5" cy="255" r="6.5"/>
+                  <circle class="core" cx="162.5" cy="255" r="3.6"/>
+                  <circle class="glint" cx="164.8" cy="252.6" r="1.7"/>
+                </g>
+              </g>
+              <g class="eye">
+                <circle class="st b" cx="237.5" cy="255" r="12"/>
+                <g class="pupil" id="pupilR">
+                  <circle class="iris" cx="237.5" cy="255" r="6.5"/>
+                  <circle class="core" cx="237.5" cy="255" r="3.6"/>
+                  <circle class="glint" cx="239.8" cy="252.6" r="1.7"/>
+                </g>
+              </g>
+
+              <rect class="fx lens" x="135" y="235" width="55" height="40" rx="6"/>
+              <rect class="fx lens" x="210" y="235" width="55" height="40" rx="6"/>
+              <path class="fx glare" d="M143 266 L153 244"/>
+              <path class="fx glare thin-glare" d="M150 268 L156 256"/>
+              <path class="fx glare" d="M218 266 L228 244"/>
+              <path class="fx glare thin-glare" d="M225 268 L231 256"/>
 
               <path class="st" d="M200 265 L195 295 Q200 300 205 295"/>
               <path class="st" d="M175 325 Q200 335 225 320"/>
@@ -581,7 +643,7 @@
       var WHATSAPP_TEXT = 'Olá! Vim pelo site da Pinnacle e gostaria de um orçamento.';
 
       var root = document.documentElement;
-      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var calm = root.classList.contains('calm');
 
       function read(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
       function write(key, value) { try { localStorage.setItem(key, value); } catch (e) {} }
@@ -670,7 +732,7 @@
       }
 
       /* ===== OLHOS E CABEÇA SEGUEM O PONTEIRO (+ olhar ocioso) ===== */
-      if (avatar && head && pupilL && pupilR && !reduce) {
+      if (avatar && head && pupilL && pupilR) {
         var live = false, visible = true, lastMove = 0, rect = null, running = false;
         var tHX = 0, tHY = 0;   // alvo (-1..1)
         var hX = 0, hY = 0;     // cabeça (lenta)
@@ -681,8 +743,8 @@
         function render() {
           hX += (tHX - hX) * 0.07; hY += (tHY - hY) * 0.07;
           pX += (tHX - pX) * 0.22; pY += (tHY - pY) * 0.22;
-          head.style.transform = 'translate(' + (hX * 6).toFixed(2) + 'px,' + (hY * 4).toFixed(2) + 'px) rotate(' + (hX * 3).toFixed(2) + 'deg)';
-          var p = 'translate(' + (pX * 5).toFixed(2) + 'px,' + (pY * 3.5).toFixed(2) + 'px)';
+          if (!calm) head.style.transform = 'translate(' + (hX * 6).toFixed(2) + 'px,' + (hY * 4).toFixed(2) + 'px) rotate(' + (hX * 3).toFixed(2) + 'deg)';
+          var p = 'translate(' + (pX * 4.5).toFixed(2) + 'px,' + (pY * 3).toFixed(2) + 'px)';
           pupilL.style.transform = p;
           pupilR.style.transform = p;
           var moving = Math.abs(tHX - hX) > 0.002 || Math.abs(tHY - hY) > 0.002 ||
@@ -720,7 +782,7 @@
 
         // Olhar ocioso: se ninguém mexe o mouse por um tempo, ele "olha em volta".
         function idle() {
-          if (live && visible && !document.hidden && Date.now() - lastMove > 2500) {
+          if (!calm && live && visible && !document.hidden && Date.now() - lastMove > 2500) {
             look((Math.random() * 2 - 1) * 0.7, (Math.random() * 2 - 1) * 0.4);
           }
           setTimeout(idle, 1800 + Math.random() * 2600);
