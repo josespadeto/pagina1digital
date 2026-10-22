@@ -220,6 +220,7 @@
     .faq-item summary::after { content: "+"; font-size: 1.5rem; color: var(--line); transition: transform .3s; flex: none; }
     .faq-item[open] summary::after { transform: rotate(45deg); }
     .faq-content { padding-bottom: 1.5rem; color: var(--muted); }
+    .faq-content p { margin-top: 0; margin-bottom: 10px; }
 
     .whatsapp-float { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 99; display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; background-color: #128c4a; color: #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(0, 0, 0, .25); transition: transform .3s ease; }
     .whatsapp-float:hover { transform: scale(1.1); }
@@ -416,7 +417,7 @@
         <div class="process-card">
           <div class="process-number">04</div>
           <h3>Entrega</h3>
-          <p>Publico o site no seu domínio e entrego as instruções para você gerenciar o conteúdo.</p>
+          <p>Publico o site no seu domínio próprio e configuro a hospedagem de alta performance no Cloudflare. O domínio fica no seu nome e a hospedagem é gratuita. Você recebe o projeto pronto, seguro e sem mensalidades.</p>
         </div>
       </div>
     </section>
@@ -465,9 +466,17 @@
       <h2 class="h2">Perguntas Frequentes<span class="dot">.</span></h2>
       <div class="faq">
         <details class="faq-item">
-          <summary>Preciso pagar alguma mensalidade?</summary>
-          <!-- TODO: migrar copy para Cloudflare Pages quando publicar -->
-          <div class="faq-content">Não. O site é seu. A hospedagem em serviços como o GitHub Pages é gratuita. Você só paga pelo domínio (se quiser um personalizado, como .com.br), que custa cerca de R$ 40/ano.</div>
+          <summary>Preciso pagar alguma mensalidade de hospedagem?</summary>
+          <div class="faq-content">
+            <p>Não. A hospedagem em serviços modernos como o Cloudflare Pages é gratuita e ilimitada para sites estáticos. O seu único custo anual será o registro do seu domínio próprio (ex: suaempresa.com.br), que fica no seu nome e custa cerca de R$ 40/ano.</p>
+            <p style="margin-top: 10px;"><strong>O que você está pagando então?</strong> Você não está pagando apenas por "um site", mas pela qualidade técnica, velocidade de carregamento, segurança estrutural (sem brechas de plugins) e um design focado em converter visitantes em clientes.</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>E o domínio próprio? Como funciona?</summary>
+          <div class="faq-content">
+            O domínio é o endereço do seu site (ex: brasiliaviagens.com.br). Ele é registrado no seu nome no Registro.br, garantindo que o endereço seja seu de verdade. A conexão e configuração desse domínio com a hospedagem (Cloudflare) são feitas por mim, sem custo adicional. Isso garante credibilidade imediata ao seu negócio, sem mensalidades de manutenção.
+          </div>
         </details>
         <details class="faq-item">
           <summary>Vou conseguir editar o site sozinho depois?</summary>
