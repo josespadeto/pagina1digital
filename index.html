@@ -6,7 +6,7 @@
   <title>Pinnacle | Sites Rápidos, Seguros e Estáveis</title>
   <meta name="description" content="Desenvolvimento de sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio. Sem mensalidades, foco em resultado.">
 
-  <!-- TODO: trocar favicon por um definitivo da Pinnacle -->
+  <!-- Favicon corrigido (sem tags cruas) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
 
   <meta property="og:type" content="website">
@@ -17,6 +17,7 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="pt_BR">
+  
   <!-- TODO: descomentar e trocar pela URL final quando publicar -->
   <!-- <meta property="og:url" content="https://pinnacle.example/"> -->
   <!-- <link rel="canonical" href="https://pinnacle.example/"> -->
@@ -104,8 +105,6 @@
     ul { list-style: none; margin: 0; padding: 0; }
     b { font-weight: 700; }
     :focus-visible { outline: 3px solid var(--line); outline-offset: 4px; border-radius: 4px; }
-
-    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
     .skip-link { position: absolute; left: 12px; top: -80px; z-index: 200; background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 6px; font-family: var(--sans); transition: top .2s; }
     .skip-link:focus { top: 12px; }
@@ -259,103 +258,3 @@
     }
   </style>
 </head>
-<body>
-
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-
-  <header class="site-header">
-    <a href="#inicio" class="logo-container" aria-label="Pinnacle, voltar ao início">
-      <svg class="logo-icon" viewBox="0 0 64 64" aria-hidden="true">
-        <polygon points="32,8 56,56 8,56"></polygon>
-        <polygon points="32,8 32,56 8,56" fill="var(--fill)"></polygon>
-      </svg>
-      <span class="logo-text">Pinnacle</span>
-    </a>
-
-    <div class="header-actions" style="display:flex; gap:15px; align-items:center;">
-      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Alternar tema claro e escuro" aria-pressed="false">
-        <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-      </button>
-      <a href="#contato" class="btn">Contato</a>
-    </div>
-  </header>
-
-  <main id="conteudo" tabindex="-1">
-    <section class="hero" id="inicio">
-      <div class="hero-backdrop"></div>
-
-      <div class="hero__text">
-        <h1 class="hero__title">
-          Sites <b>rápidos, seguros e estáveis</b> para negócios que não podem parar.
-        </h1>
-        <p class="hero__lede">
-          Tenha a tranquilidade de um site que carrega em menos de 1 segundo, não sai do ar e protege os dados dos seus clientes. Sem mensalidades, sem dores de cabeça. Apenas resultados.
-        </p>
-        <div class="hero__cta">
-          <a href="#contato" class="btn btn--lg">Pedir orçamento</a>
-        </div>
-      </div>
-
-      <div class="stage">
-        <div class="avatar-shadow"></div>
-
-        <svg class="avatar" id="avatar" viewBox="0 0 400 500" role="img" aria-label="Ilustração de José">
-          <defs>
-            <filter id="drop-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="8" stdDeviation="6" flood-opacity="0.15"/>
-            </filter>
-            <filter id="blur-shadow">
-              <feGaussianBlur stdDeviation="4"/>
-            </filter>
-          </defs>
-
-          <g class="breath-slow">
-            <path class="st b" d="M175 320V390Q200 410 225 390V320Z"/>
-            <path class="st f" d="M36 500C36 420 108 390 200 390C292 390 364 420 364 500Z"/>
-            <path class="st" d="M160 394Q200 430 240 394"/>
-          </g>
-
-          <g class="breath" filter="url(#drop-shadow)">
-            <g id="head">
-              <path class="st b" d="M105 230C105 125 295 125 295 230C295 315 250 360 200 360C150 360 105 315 105 230Z"/>
-              <path d="M220 130 C280 140 295 190 295 230 C295 315 250 360 200 360 C240 360 260 300 260 230 C260 180 240 150 220 130 Z" fill="rgba(15, 27, 97, 0.08)" filter="url(#blur-shadow)"/>
-              <path class="st b" d="M105 240C90 240 85 255 90 270C95 285 105 290 110 285"/>
-              <path class="st b" d="M295 240C310 240 315 255 310 270C305 285 295 290 290 285"/>
-              <path class="st f" d="M 95 230 C 85 160 110 100 150 95 C 170 70 210 70 230 90 C 260 85 285 110 300 150 C 310 180 305 210 300 230 C 290 200 270 180 240 175 C 210 170 180 195 150 190 C 120 185 100 210 95 230 Z"/>
-              <path class="st f" d="M 150 95 L 160 110 L 170 90 L 185 105 L 200 85 L 215 105 L 230 90 Z"/>
-              <path class="st f" d="M 240 95 L 250 110 L 265 100 L 280 120 Z"/>
-              <path d="M 120 160 Q 150 120 180 110 Q 150 150 130 170 Z" fill="rgba(255, 255, 255, 0.15)" filter="url(#blur-shadow)"/>
-              <rect class="st" x="135" y="235" width="55" height="40" rx="6"/>
-              <rect class="st" x="210" y="235" width="55" height="40" rx="6"/>
-              <path class="st" d="M190 250 Q200 240 210 250"/>
-              <path class="st" d="M105 245 L135 245"/>
-              <path class="st" d="M265 245 L295 245"/>
-              <path class="st" d="M145 220 Q160 210 175 220" stroke-width="4"/>
-              <path class="st" d="M225 220 Q240 210 255 220" stroke-width="4"/>
-              <g class="eye"><circle class="st b" cx="162.5" cy="255" r="12"/><circle class="pupil" id="pupilL" cx="162.5" cy="255" r="5"/></g>
-              <g class="eye"><circle class="st b" cx="237.5" cy="255" r="12"/><circle class="pupil" id="pupilR" cx="237.5" cy="255" r="5"/></g>
-              <path class="st" d="M200 265 L195 295 Q200 300 205 295"/>
-              <path class="st" d="M175 325 Q200 335 225 320"/>
-              <path class="st" d="M120 295 Q140 345 200 355 Q260 345 280 295" stroke-width="1.5" stroke-dasharray="1 4" stroke-linecap="round"/>
-            </g>
-          </g>
-        </svg>
-      </div>
-    </section>
-
-    <section class="section" id="diferenciais">
-      <h2 class="h2">Por que escolher a <span class="brand-highlight">Pinnacle</span>.</h2>
-
-      <div class="bento-grid">
-        <div class="bento-card large">
-          <h3>Velocidade que Converte</h3>
-          <p>Se o seu site demora mais de 3 segundos para abrir, você está perdendo clientes para o concorrente. Meus sites são construídos para carregar instantaneamente, mantendo o visitante engajado e melhorando seu ranking no Google.</p>
-        </div>
-        <div class="bento-card">
-          <h3>Segurança Blindada</h3>
-          <p>Sites em WordPress são alvos fáceis de hackers. O seu será estático, sem banco de dados e sem plugins, o que reduz drasticamente a superfície de ataque e elimina a dor de cabeça de atualizações.</p>
-        </div>
-        <div class="bento-card">
-          <h3>Estabilidade Garantida</h3>
-          <p>Chega de sites que saem do ar sem motivo. A arquitetura estática que uso dispensa banco de dados e processos que costumam falhar. O seu site fica no ar, todos os dias
