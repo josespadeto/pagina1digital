@@ -13,7 +13,7 @@
   <meta property="og:title" content="Pinnacle | Sites Rápidos, Seguros e Estáveis">
   <meta property="og:description" content="Sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio, sem dores de cabeça.">
   <!-- TODO: copiar a imagem para assets/og-pinnacle.jpg no repositório -->
-  <meta property="og:image" content="assets/og-pinnacle.jpg">
+  <meta property="og:image" content="https://rmcontarecantar.art.br/assets/images/og-contar-cantar.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="pt_BR">
@@ -105,6 +105,8 @@
     ul { list-style: none; margin: 0; padding: 0; }
     b { font-weight: 700; }
     :focus-visible { outline: 3px solid var(--line); outline-offset: 4px; border-radius: 4px; }
+
+    .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
     .skip-link { position: absolute; left: 12px; top: -80px; z-index: 200; background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 6px; font-family: var(--sans); transition: top .2s; }
     .skip-link:focus { top: 12px; }
@@ -376,14 +378,14 @@
       <p class="section__lede">Não falo apenas de performance e segurança. Eu construo. Este é um projeto real, no ar.</p>
 
       <div class="portfolio-showcase">
-        <!-- TODO: copiar a imagem para assets/hero.webp no repositório -->
+        <!-- TODO: quando a imagem estiver na pasta assets/ do seu projeto, troque o src para: assets/hero.webp -->
         <div class="portfolio-image-wrap">
-          <img src="assets/hero.webp" alt="Captura de tela do site Contar e Cantar" loading="lazy">
+          <img src="https://rmcontarecantar.art.br/assets/images/hero.webp" alt="Captura de tela do site Contar e Cantar" loading="lazy" fetchpriority="high">
         </div>
         <div class="portfolio-content">
           <div class="portfolio-badge">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            100/100 no PageSpeed (laboratório)
+            100/100 no PageSpeed
           </div>
           <h3>Contar e Cantar</h3>
           <p>Um arquivo digital dedicado à memória da música brasileira. Design editorial, código puro e uma experiência de leitura impecável em qualquer dispositivo.</p>
@@ -444,7 +446,7 @@
       <p class="section__lede">Digite a URL do seu site atual e veja a nota de performance, SEO e acessibilidade diretamente no Google PageSpeed Insights.</p>
 
       <form class="audit-form" id="auditForm" novalidate>
-        <label for="siteUrl" class="visually-hidden" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">URL do site para análise</label>
+        <label for="siteUrl" class="visually-hidden">URL do site para análise</label>
         <input
           type="url"
           id="siteUrl"
