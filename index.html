@@ -170,6 +170,8 @@
 
     .hero__title { font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem); line-height: 1.15; margin: 0 0 1.5rem; font-weight: 400; letter-spacing: -0.02em; }
     .hero__title b { font-weight: 700; color: var(--ink); }
+    .hero__hi { display: block; margin-bottom: .3em; }
+    .hero__pitch { display: block; font-size: .6em; line-height: 1.3; letter-spacing: -0.01em; }
 
     .hero__lede { max-width: 45ch; font-size: clamp(1.05rem, 1rem + .4vw, 1.25rem); line-height: 1.6; margin: 0 0 2rem; font-weight: 400; }
 
@@ -366,7 +368,6 @@
     </a>
 
     <div class="header-actions">
-      <!-- Menu Desktop -->
       <nav class="nav-desktop" aria-label="Navegação principal">
         <a href="#inicio">Home</a>
         <a href="#portfolio">Demonstração</a>
@@ -382,14 +383,12 @@
 
       <a href="#contato" class="btn">Contato</a>
 
-      <!-- Botão Hambúrguer (Mobile) -->
       <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-mobile" aria-label="Abrir menu de navegação">
         <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
       </button>
     </div>
   </header>
 
-  <!-- Menu Mobile (oculto por padrão) -->
   <nav class="nav-mobile" id="nav-mobile" aria-label="Navegação mobile">
     <a href="#inicio">Home</a>
     <a href="#portfolio">Demonstração</a>
@@ -405,7 +404,8 @@
 
       <div class="hero__text">
         <h1 class="hero__title">
-          Sites <b>rápidos, seguros e estáveis</b> para negócios que não podem parar.
+          <span class="hero__hi">Oi, me chamo <b>José</b>.</span>
+          <span class="hero__pitch">Crio sites <b>rápidos, seguros e estáveis</b> para negócios que não podem parar.</span>
         </h1>
         <p class="hero__lede">
           Tenha a tranquilidade de um site que carrega em menos de 1 segundo, não sai do ar e protege os dados dos seus clientes. Sem mensalidades, sem dores de cabeça. Apenas resultados.
@@ -698,7 +698,6 @@
           menuToggle.setAttribute('aria-expanded', !expanded);
           navMobile.classList.toggle('is-open');
         });
-        // Fecha o menu ao clicar em um link
         navMobile.querySelectorAll('a').forEach(function (link) {
           link.addEventListener('click', function () {
             menuToggle.setAttribute('aria-expanded', 'false');
@@ -716,7 +715,7 @@
         });
       }
 
-      /* ===== ENTRADA: texto palavra por palavra + avatar desenhado ===== */
+      /* ===== ENTRADA ===== */
       var avatar = document.getElementById('avatar');
       var head = document.getElementById('head');
       var pupilL = document.getElementById('pupilL');
