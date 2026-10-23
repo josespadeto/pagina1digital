@@ -70,7 +70,9 @@
       --line: #7b22e6;
       --on-line: #ffffff;
       --fill: #aadcec;
-      --skin: #f9e7d9;
+      --skin: #f4f9fc;
+      --hair: #aadcec;
+      --hair-dark: #6b7b92;
       --pupil: #0f1b61;
       --card-bg: #ffffff;
       --card-border: rgba(15, 27, 97, 0.12);
@@ -97,6 +99,7 @@
       --badge-green: rgba(46, 125, 50, 0.18);
       --badge-green-text: #81c784;
       --text-contrast: #ffffff;
+      --hair: #4f8fa8;
       color-scheme: dark;
     }
 
@@ -161,30 +164,32 @@
 
     /* ---------- Avatar: aparência base (sem animação) ---------- */
     .avatar { position: relative; width: min(100%, 420px); height: auto; overflow: visible; }
-    .avatar .st { stroke: var(--line); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; fill: none; }
+    .avatar .st { stroke: var(--line); stroke-width: 3.4; stroke-linejoin: round; stroke-linecap: round; fill: none; }
     .avatar .b { fill: var(--skin); }
     .avatar .f { fill: var(--fill); }
-    /* Estes dois vinham com stroke-width="4" no atributo, mas a regra .st (CSS) anulava o atributo.
-       Aqui a sobrancelha volta a ter a espessura pretendida. */
-    .avatar .brow { stroke-width: 4; }
-    .avatar .dots { fill: none; stroke: var(--line); stroke-width: 1.5; stroke-dasharray: 1 4; stroke-linecap: round; }
-    .avatar .thin { stroke-width: 1.6; stroke-opacity: .55; }
-    .avatar .iris { fill: #4b5fd6; }
-    .avatar .core { fill: var(--pupil); }
-    .avatar .glint { fill: #ffffff; }
-    .avatar .lens { fill: rgba(255, 255, 255, .2); }
-    .avatar .glare { fill: none; stroke: #ffffff; stroke-width: 2.2; stroke-linecap: round; stroke-opacity: .7; }
-    .avatar .thin-glare { stroke-width: 1.4; }
-    .avatar .fringe { fill: none; stroke: rgba(15, 27, 97, .08); stroke-width: 8; stroke-linecap: round; }
+    .avatar .hr { fill: var(--hair); }
+    .avatar .sc { fill: #ffffff; }
+    .avatar .core { fill: var(--line); }
+    .avatar .thin { stroke-width: 2.2; }
+    .avatar .brow { stroke-width: 12; }
+    .avatar .frame { stroke-width: 3.6; }
+    .avatar .mouth { stroke-width: 3.6; }
+    .avatar .lens { fill: rgba(170, 220, 236, .22); }
+    .avatar .glare { fill: none; stroke: #ffffff; stroke-width: 3; stroke-linecap: round; stroke-opacity: .8; }
 
     .avatar .eye { transform-box: fill-box; transform-origin: center; animation: blink 5s infinite var(--blink-delay, 3s); }
-    #head { transform-box: view-box; transform-origin: 200px 360px; will-change: transform; }
+    #head { transform-box: fill-box; transform-origin: 50% 92%; will-change: transform; }
 
-    .avatar .breath { animation: breathe 4s ease-in-out var(--end, 0s) infinite; transform-box: view-box; transform-origin: 200px 340px; }
-    .avatar .breath-slow { animation: breathe-slow 4s ease-in-out var(--end, 0s) infinite; transform-box: view-box; transform-origin: 200px 480px; }
+    .avatar .breath { animation: breathe 4s ease-in-out var(--end, 0s) infinite; transform-box: fill-box; transform-origin: 50% 92%; }
+    .avatar .breath-slow { animation: breathe-slow 4s ease-in-out var(--end, 0s) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
 
-    @keyframes breathe { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.01); } }
+    @keyframes breathe { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-6px) scale(1.01); } }
     @keyframes breathe-slow { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(1.01); } }
+    .avatar .brows { transform-box: fill-box; transform-origin: center; animation: browLift 7s ease-in-out infinite var(--blink-delay, 4s); }
+    .avatar .wisp { transform-box: fill-box; transform-origin: 0% 100%; animation: sway 5s ease-in-out infinite var(--end, 0s); }
+    .avatar .wisp + .wisp { animation-duration: 6.5s; animation-direction: reverse; }
+    @keyframes browLift { 0%, 84%, 100% { transform: translateY(0); } 89%, 94% { transform: translateY(-7px); } }
+    @keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
     @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 
     /* ================= ENTRADA (só com .anim) =================
@@ -214,11 +219,15 @@
       animation: drawLine 1s var(--ease) var(--d, 0s) forwards;
     }
     .anim.ready .avatar .st.b,
-    .anim.ready .avatar .st.f {
+    .anim.ready .avatar .st.f,
+    .anim.ready .avatar .st.sc,
+    .anim.ready .avatar .st.sh {
       fill-opacity: 0;
       animation: drawLine 1s var(--ease) var(--d, 0s) forwards,
                  fillIn .9s ease calc(var(--d, 0s) + .7s) forwards;
     }
+    .anim.ready .avatar .fl { opacity: 0; animation: fadeInFill .9s ease calc(var(--d, 0s) + .6s) forwards; }
+    .anim.ready .avatar .fl.late { animation-delay: calc(var(--d, 0s) + 1s); }
     .anim.ready .avatar .fx,
     .anim.ready .avatar .pupil { opacity: 0; animation: fadeInFill .8s ease var(--end, 3s) forwards; }
 
@@ -327,7 +336,7 @@
     @keyframes fadeOnly { to { opacity: 1; } }
     .calm .w { transform: none; filter: none; animation-name: wordFade; }
     .calm .hero__lede, .calm .hero__cta { animation-name: fadeOnly; }
-    .calm .avatar .breath, .calm .avatar .breath-slow, .calm .avatar .eye { animation: none; }
+    .calm .avatar .breath, .calm .avatar .breath-slow, .calm .avatar .eye, .calm .avatar .brows, .calm .avatar .wisp { animation: none; }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
     }
@@ -374,94 +383,81 @@
       <div class="stage">
         <div class="avatar-shadow"></div>
 
-        <svg class="avatar" id="avatar" viewBox="0 0 400 500" role="img" aria-label="Ilustração de José">
+        <svg class="avatar" id="avatar" viewBox="430 40 520 710" role="img" aria-label="Ilustração de um homem de óculos, bigode e cabelo bagunçado, sorrindo discretamente">
           <defs>
-            <!-- Sombras e luzes suaves por gradiente (sem filter SVG: mais leve para animar) -->
-            <linearGradient id="shadeGrad" x1="1" y1="0" x2="0" y2="0">
-              <stop offset="0" stop-color="#0f1b61" stop-opacity=".14"/>
-              <stop offset="1" stop-color="#0f1b61" stop-opacity="0"/>
-            </linearGradient>
-            <radialGradient id="hiGrad">
-              <stop offset="0" stop-color="#ffffff" stop-opacity=".3"/>
-              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="blushGrad">
-              <stop offset="0" stop-color="#f08a8a" stop-opacity=".4"/>
-              <stop offset="1" stop-color="#f08a8a" stop-opacity="0"/>
-            </radialGradient>
-            <radialGradient id="neckShade">
-              <stop offset="0" stop-color="#0f1b61" stop-opacity=".14"/>
-              <stop offset="1" stop-color="#0f1b61" stop-opacity="0"/>
-            </radialGradient>
-            <linearGradient id="shirtShade" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stop-color="#0f1b61" stop-opacity="0"/>
-              <stop offset="1" stop-color="#0f1b61" stop-opacity=".16"/>
-            </linearGradient>
+            <pattern id="dots" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><circle cx="2.5" cy="2.5" r="1.25" fill="#7dc0d9"/></pattern>
           </defs>
 
           <g class="breath-slow">
-            <path class="st b" d="M175 320V390Q200 410 225 390V320Z"/>
-            <ellipse class="fx" cx="200" cy="368" rx="25" ry="10" fill="url(#neckShade)"/>
-            <path class="st f" d="M36 500C36 420 108 390 200 390C292 390 364 420 364 500Z"/>
-            <path class="fx" d="M36 500C36 420 108 390 200 390C292 390 364 420 364 500Z" fill="url(#shirtShade)"/>
-            <path class="st" d="M160 394Q200 430 240 394"/>
-            <path class="st thin" d="M168 398Q200 425 232 398"/>
+            <path class="fl f" d="M 432 750 L 430 724 C 442 682 522 650 600 626 C 625 660 660 690 690 696 C 720 690 748 662 770 626 C 850 650 930 662 940 722 L 942 750 Z" transform="translate(4 3)"/>
+            <path class="st" d="M 430 750 L 430 724 C 442 682 522 650 600 626 C 625 660 660 690 690 696 C 720 690 748 662 770 626 C 850 650 930 662 940 722 L 942 750"/>
+            <!-- pescoço -->
+            <path class="st b" d="M 603 540 C 604 580 602 604 600 626 C 625 660 660 690 690 696 C 720 690 748 662 770 626 C 764 604 760 580 760 540 Z"/>
+            <path class="fx" d="M 604 560 C 640 600 720 604 760 560 L 760 586 C 722 618 640 618 604 586 Z" fill="var(--hair)"/>
+            <path class="st thin" d="M 662 624 Q 690 634 716 624"/>
           </g>
 
           <g class="breath">
             <g id="head">
-              <path class="st b" d="M105 230C105 125 295 125 295 230C295 315 250 360 200 360C150 360 105 315 105 230Z"/>
-              <path class="fx" d="M220 130 C280 140 295 190 295 230 C295 315 250 360 200 360 C240 360 260 300 260 230 C260 180 240 150 220 130 Z" fill="url(#shadeGrad)"/>
-              <ellipse class="fx" cx="152" cy="300" rx="18" ry="10" fill="url(#blushGrad)"/>
-              <ellipse class="fx" cx="248" cy="300" rx="18" ry="10" fill="url(#blushGrad)"/>
-              <path class="st b" d="M105 240C90 240 85 255 90 270C95 285 105 290 110 285"/>
-              <path class="st b" d="M295 240C310 240 315 255 310 270C305 285 295 290 290 285"/>
-              <path class="st thin" d="M100 252C96 256 96 264 100 270"/>
-              <path class="st thin" d="M300 252C304 256 304 264 300 270"/>
-              <path class="st f" d="M 95 230 C 85 160 110 100 150 95 C 170 70 210 70 230 90 C 260 85 285 110 300 150 C 310 180 305 210 300 230 C 290 200 270 180 240 175 C 210 170 180 195 150 190 C 120 185 100 210 95 230 Z"/>
-              <path class="st f" d="M 150 95 L 160 110 L 170 90 L 185 105 L 200 85 L 215 105 L 230 90 Z"/>
-              <path class="st f" d="M 240 95 L 250 110 L 265 100 L 280 120 Z"/>
-              <path class="st thin" d="M 140 100 C 118 130 108 165 108 196"/>
-              <path class="st thin" d="M 168 94 C 148 120 134 148 128 178"/>
-              <path class="st thin" d="M 222 90 C 240 108 252 132 256 160"/>
-              <path class="st thin" d="M 250 94 C 272 116 285 150 288 190"/>
-              <path class="fx" d="M 120 160 Q 150 120 180 110 Q 150 150 130 170 Z" fill="url(#hiGrad)"/>
-              <path class="fx fringe" d="M 108 232 C 112 214 126 192 150 197 C 180 202 210 177 240 182 C 268 187 286 202 292 226"/>
-              <rect class="st" x="135" y="235" width="55" height="40" rx="6"/>
-              <rect class="st" x="210" y="235" width="55" height="40" rx="6"/>
-              <path class="st" d="M190 250 Q200 240 210 250"/>
-              <path class="st" d="M105 245 L135 245"/>
-              <path class="st" d="M265 245 L295 245"/>
-              <path class="st brow" d="M145 220 Q160 210 175 220"/>
-              <path class="st brow" d="M225 220 Q240 210 255 220"/>
+              <!-- orelhas -->
+              <path class="st b" d="M 550 366 C 520 350 494 372 500 398 C 505 422 532 426 550 410"/>
+              <path class="st thin" d="M 512 394 C 510 382 526 380 526 392 C 526 402 516 402 517 396"/>
+              <path class="st b" d="M 832 372 C 862 355 882 386 868 410 C 860 426 842 424 830 414"/>
+              <path class="st thin" d="M 858 396 C 856 384 872 384 872 396 C 872 404 862 404 863 399"/>
 
-              <g class="eye">
-                <circle class="st b" cx="162.5" cy="255" r="12"/>
-                <g class="pupil" id="pupilL">
-                  <circle class="iris" cx="162.5" cy="255" r="6.5"/>
-                  <circle class="core" cx="162.5" cy="255" r="3.6"/>
-                  <circle class="glint" cx="164.8" cy="252.6" r="1.7"/>
-                </g>
-              </g>
-              <g class="eye">
-                <circle class="st b" cx="237.5" cy="255" r="12"/>
-                <g class="pupil" id="pupilR">
-                  <circle class="iris" cx="237.5" cy="255" r="6.5"/>
-                  <circle class="core" cx="237.5" cy="255" r="3.6"/>
-                  <circle class="glint" cx="239.8" cy="252.6" r="1.7"/>
-                </g>
+              <!-- rosto -->
+              <path class="st b" d="M 548 205 C 545 330 540 440 556 502 C 575 562 640 592 695 590 C 760 588 815 540 832 470 C 842 430 846 380 842 300 C 840 250 830 215 800 200 C 760 140 600 140 548 205 Z"/>
+              <!-- nariz, bigode, barba (meio-tom) -->
+              <path class="fx" d="M 680 340 C 692 380 702 420 724 440 C 714 458 692 468 672 462 C 692 440 694 380 680 340 Z" fill="var(--hair)"/>
+              <path class="fx" d="M 620 480 C 640 462 740 462 750 480 C 735 492 640 494 620 480 Z" fill="url(#dots)"/>
+              <path class="fx" d="M 654 522 H 726 V 536 H 654 Z" fill="url(#dots)"/>
+              <path class="fx" d="M 556 502 C 580 562 640 592 695 590 C 760 588 812 545 832 478 C 800 522 760 544 695 550 C 640 550 590 540 556 502 Z" fill="url(#dots)"/>
+              <path class="fx" d="M 610 575 C 650 600 740 600 770 570 C 740 612 640 612 610 575 Z" fill="var(--hair)" fill-opacity=".85"/>
+
+              <!-- cabelo -->
+              <path class="fl hr" d="M 548 354 C 530 362 500 354 482 346 C 490 336 490 320 486 300 C 480 272 482 244 484 218 C 482 198 492 182 504 180 C 500 166 508 150 522 146 C 530 130 545 108 562 100 C 600 80 625 72 650 66 C 690 56 725 62 752 55 C 742 64 736 72 738 78 C 790 72 835 95 855 128 C 860 138 862 148 864 155 C 872 162 878 170 880 178 C 872 180 868 184 868 190 C 885 215 895 245 902 275 C 898 300 892 330 884 352 C 872 330 860 300 850 270 C 846 262 840 262 834 262 C 826 240 812 215 798 200 C 796 220 794 235 790 250 C 778 240 765 232 750 222 L 722 192 C 724 212 732 230 752 246 C 730 236 706 222 690 208 C 672 194 650 188 628 192 C 604 196 588 206 580 218 C 592 232 596 250 590 268 C 580 280 566 290 556 298 C 550 320 548 338 548 354 Z" transform="translate(4 3)"/>
+              <path class="st" d="M 548 354 C 530 362 500 354 482 346 C 490 336 490 320 486 300 C 480 272 482 244 484 218 C 482 198 492 182 504 180 C 500 166 508 150 522 146 C 530 130 545 108 562 100 C 600 80 625 72 650 66 C 690 56 725 62 752 55 C 742 64 736 72 738 78 C 790 72 835 95 855 128 C 860 138 862 148 864 155 C 872 162 878 170 880 178 C 872 180 868 184 868 190 C 885 215 895 245 902 275 C 898 300 892 330 884 352 C 872 330 860 300 850 270 C 846 262 840 262 834 262 C 826 240 812 215 798 200 C 796 220 794 235 790 250 C 778 240 765 232 750 222 L 722 192 C 724 212 732 230 752 246 C 730 236 706 222 690 208 C 672 194 650 188 628 192 C 604 196 588 206 580 218 C 592 232 596 250 590 268 C 580 280 566 290 556 298 C 550 320 548 338 548 354 Z"/>
+              <path class="st thin" d="M 680 262 C 676 252 676 244 680 236"/>
+              <path class="st thin" d="M 596 250 C 590 262 584 270 574 276"/>
+              <path class="st thin" d="M 520 300 C 510 330 512 360 522 384"/>
+              <g class="wisp"><path class="st" d="M 484 144 C 500 138 520 144 530 160"/></g>
+              <g class="wisp"><path class="st" d="M 716 70 C 730 66 744 70 752 78"/></g>
+              <path class="fl hr" d="M 550 424 C 530 432 518 450 520 476 C 534 470 546 472 554 476 Z" transform="translate(4 3)"/>
+              <path class="st" d="M 550 424 C 530 432 518 450 520 476 C 534 470 546 472 554 476"/>
+
+              <!-- sobrancelhas -->
+              <g class="brows">
+                <path class="st brow" d="M 554 294 Q 590 280 634 298"/>
+                <path class="st brow" d="M 720 286 Q 770 276 820 302"/>
               </g>
 
-              <rect class="fx lens" x="135" y="235" width="55" height="40" rx="6"/>
-              <rect class="fx lens" x="210" y="235" width="55" height="40" rx="6"/>
-              <path class="fx glare" d="M143 266 L153 244"/>
-              <path class="fx glare thin-glare" d="M150 268 L156 256"/>
-              <path class="fx glare" d="M218 266 L228 244"/>
-              <path class="fx glare thin-glare" d="M225 268 L231 256"/>
+              <!-- óculos -->
+              <path class="fx lens" d="M 538 322 H 650 V 395 Q 650 410 635 410 H 560 Q 538 410 538 388 Z"/>
+              <path class="fx lens" d="M 718 322 H 830 V 392 Q 830 412 810 412 H 740 Q 718 410 718 388 Z"/>
+              <path class="st frame" d="M 538 322 H 650 V 395 Q 650 410 635 410 H 560 Q 538 410 538 388 Z"/>
+              <path class="st frame" d="M 718 322 H 830 V 392 Q 830 412 810 412 H 740 Q 718 410 718 388 Z"/>
+              <path class="st frame" d="M 650 322 H 718"/>
+              <path class="st frame" d="M 538 332 L 522 344"/>
+              <path class="st frame" d="M 830 336 L 848 346"/>
 
-              <path class="st" d="M200 265 L195 295 Q200 300 205 295"/>
-              <path class="st" d="M175 325 Q200 335 225 320"/>
-              <path class="dots fx" d="M120 295 Q140 345 200 355 Q260 345 280 295"/>
+              <!-- olhos -->
+              <g class="eye">
+                <circle class="st sc" cx="598" cy="352" r="9.5"/>
+                <g class="pupil" id="pupilL"><circle class="core" cx="598" cy="352" r="3.4"/></g>
+                <path class="st thin" d="M 590 369 H 607"/>
+              </g>
+              <g class="eye">
+                <circle class="st sc" cx="770" cy="350" r="9.5"/>
+                <g class="pupil" id="pupilR"><circle class="core" cx="770" cy="350" r="3.4"/></g>
+                <path class="st thin" d="M 762 367 H 779"/>
+              </g>
+              <path class="fx glare" d="M 556 400 L 566 380"/>
+              <path class="fx glare" d="M 736 402 L 746 382"/>
+
+              <!-- nariz e sorriso discreto -->
+              <path class="st" d="M 650 332 C 650 380 646 415 648 436 C 652 464 700 470 722 440"/>
+              <path class="st mouth" d="M 628 508 C 660 522 712 520 744 498"/>
+
             </g>
           </g>
         </svg>
@@ -714,12 +710,24 @@
           // Avatar: mede cada traço e escalona o desenho
           var strokes = avatar.querySelectorAll('.st');
           var lastDelay = 0;
+          var step = Math.min(0.06, 1.6 / strokes.length); // desenho total ~1,6 s
           Array.prototype.forEach.call(strokes, function (el, i) {
             var len = Math.ceil(el.getTotalLength()) + 2;
-            var delay = 0.45 + i * 0.06;
+            var delay = 0.45 + i * step;
             el.style.setProperty('--len', len);
             el.style.setProperty('--d', delay.toFixed(2) + 's');
             lastDelay = delay;
+          });
+          // Preenchimentos deslocados (.fl) aparecem junto com o contorno que vem logo depois
+          Array.prototype.forEach.call(avatar.querySelectorAll('.fl'), function (el) {
+            var n = el.nextElementSibling;
+            while (n && !n.classList.contains('st')) n = n.nextElementSibling;
+            if (n) el.style.setProperty('--d', n.style.getPropertyValue('--d'));
+          });
+          // ...exceto as mechas atrás do rosto: esperam o rosto ser desenhado
+          var faceEl = avatar.querySelector('#head .st.b');
+          Array.prototype.forEach.call(avatar.querySelectorAll('.fl.late'), function (el) {
+            if (faceEl) el.style.setProperty('--d', faceEl.style.getPropertyValue('--d'));
           });
           introEnd = lastDelay + 1.1;
           avatar.style.setProperty('--end', introEnd.toFixed(2) + 's');
@@ -743,8 +751,8 @@
         function render() {
           hX += (tHX - hX) * 0.07; hY += (tHY - hY) * 0.07;
           pX += (tHX - pX) * 0.22; pY += (tHY - pY) * 0.22;
-          if (!calm) head.style.transform = 'translate(' + (hX * 6).toFixed(2) + 'px,' + (hY * 4).toFixed(2) + 'px) rotate(' + (hX * 3).toFixed(2) + 'deg)';
-          var p = 'translate(' + (pX * 4.5).toFixed(2) + 'px,' + (pY * 3).toFixed(2) + 'px)';
+          if (!calm) head.style.transform = 'translate(' + (hX * 9).toFixed(2) + 'px,' + (hY * 6).toFixed(2) + 'px) rotate(' + (hX * 3).toFixed(2) + 'deg)';
+          var p = 'translate(' + (pX * 5).toFixed(2) + 'px,' + (pY * 3.2).toFixed(2) + 'px)';
           pupilL.style.transform = p;
           pupilR.style.transform = p;
           var moving = Math.abs(tHX - hX) > 0.002 || Math.abs(tHY - hY) > 0.002 ||
