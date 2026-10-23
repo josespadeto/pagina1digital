@@ -6,10 +6,8 @@
   <title>Pinnacle | Sites Rápidos, Seguros e Estáveis</title>
   <meta name="description" content="Desenvolvimento de sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio. Sem mensalidades, foco em resultado.">
 
-  <!-- Favicon na identidade da marca (triângulo), em vez do emoji genérico -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,8 56,56 8,56' fill='%23aadcec' stroke='%237b22e6' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E">
 
-  <!-- TODO: trocar og:image por uma imagem da própria Pinnacle (1200x630) hospedada no seu domínio; e adicionar <link rel="canonical"> e og:url quando o domínio estiver definido -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Pinnacle | Sites Rápidos, Seguros e Estáveis">
   <meta property="og:description" content="Sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio, sem dores de cabeça.">
@@ -33,12 +31,6 @@
           root.setAttribute('data-theme', 'dark');
         }
       } catch (e) {}
-      // Introdução (desenho do avatar + texto) roda SEMPRE, uma única vez.
-      // Se o sistema operacional pede "reduzir movimento", entra o modo "calm":
-      // mantém a introdução (só opacidade/traço, sem deslocamentos) e desliga
-      // apenas os movimentos contínuos (respiração, piscar, cabeça, olhar ocioso).
-      // Use ?full=1 na URL para forçar o modo completo em qualquer máquina.
-      // Se o script principal falhar, o estado "escondido" é desfeito em 3s.
       try {
         root.classList.add('anim');
         if (window.matchMedia('(prefers-reduced-motion: reduce)').matches && !/[?&]full=1/.test(location.search)) {
@@ -104,7 +96,6 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-    /* Sem isto, display:flex/inline-flex das classes anula o atributo [hidden] */
     [hidden] { display: none !important; }
     html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; scroll-padding-top: 90px; }
     body {
@@ -125,12 +116,20 @@
     .skip-link { position: absolute; left: 12px; top: -80px; z-index: 200; background: var(--ink); color: var(--bg); padding: 10px 14px; border-radius: 6px; font-family: var(--sans); transition: top .2s; }
     .skip-link:focus { top: 12px; }
 
+    /* ================= HEADER E NAVEGAÇÃO ================= */
     .site-header { position: fixed; top: 0; left: 0; right: 0; z-index: 60; display: flex; justify-content: space-between; align-items: center; padding: 18px var(--gutter); font-family: var(--sans); background: linear-gradient(var(--bg) 55%, transparent); }
 
     .logo-container { display: flex; align-items: center; gap: 12px; text-decoration: none; }
     .logo-icon { width: 32px; height: 32px; fill: none; stroke: var(--line); stroke-width: 3; stroke-linejoin: round; }
     .logo-icon .logo-fill { fill: var(--fill); }
     .logo-text { font-weight: 800; font-size: 1.3rem; letter-spacing: -0.03em; color: var(--ink); }
+
+    .header-actions { display: flex; gap: 15px; align-items: center; }
+
+    /* Menu Desktop */
+    .nav-desktop { display: flex; gap: 22px; margin-right: 5px; align-items: center; }
+    .nav-desktop a { font-size: 0.85rem; font-weight: 600; color: var(--ink); opacity: 0.8; transition: opacity .2s, color .2s; padding: 8px 0; white-space: nowrap; }
+    .nav-desktop a:hover { opacity: 1; color: var(--line); }
 
     .theme-toggle { background: none; border: none; cursor: pointer; color: var(--ink); padding: 10px; border-radius: 50%; display: grid; place-items: center; }
     .theme-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -143,6 +142,24 @@
     .btn--lg { padding: 16px 30px; font-size: .8rem; }
     .btn--accent { background: var(--line); color: var(--on-line); }
     .btn--outline { background: transparent; border: 2px solid var(--line); color: var(--ink); }
+
+    /* Botão Hambúrguer */
+    .menu-toggle { display: none; background: none; border: none; cursor: pointer; color: var(--ink); padding: 10px; margin-left: 5px; }
+    .menu-toggle svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+
+    /* Menu Mobile */
+    .nav-mobile { display: none; position: fixed; top: 75px; left: 0; right: 0; background: var(--bg); border-bottom: 1px solid var(--card-border); padding: 20px var(--gutter); z-index: 59; flex-direction: column; gap: 0; box-shadow: 0 10px 20px var(--shadow); }
+    .nav-mobile.is-open { display: flex; }
+    .nav-mobile a { font-family: var(--sans); font-size: 1rem; font-weight: 600; padding: 12px 0; border-bottom: 1px solid var(--card-border); }
+    .nav-mobile a:last-child { border-bottom: none; }
+
+    @media (max-width: 920px) {
+      .nav-desktop { display: none; }
+      .menu-toggle { display: block; }
+    }
+    @media (min-width: 921px) {
+      .nav-mobile { display: none !important; }
+    }
 
     /* ================= HERO ================= */
     .hero { position: relative; min-height: 100svh; max-width: var(--maxw); margin: 0 auto; padding: 140px var(--gutter) 80px; display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: clamp(40px, 6vw, 80px); }
@@ -162,7 +179,7 @@
 
     .avatar-shadow { position: absolute; bottom: 5%; left: 50%; transform: translateX(-50%); width: 60%; height: 10%; background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, transparent 70%); filter: blur(8px); z-index: -1; }
 
-    /* ---------- Avatar: aparência base (sem animação) ---------- */
+    /* ---------- Avatar ---------- */
     .avatar { position: relative; width: min(100%, 420px); height: auto; overflow: visible; }
     .avatar .st { stroke: var(--line); stroke-width: 3.4; stroke-linejoin: round; stroke-linecap: round; fill: none; }
     .avatar .b { fill: var(--skin); }
@@ -192,9 +209,7 @@
     @keyframes sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
     @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
 
-    /* ================= ENTRADA (só com .anim) =================
-       .anim  = movimento permitido (definido no <head>)
-       .ready = JS já preparou comprimentos dos traços e palavras */
+    /* ================= ENTRADA ================= */
     @keyframes drawLine { to { stroke-dashoffset: 0; } }
     @keyframes fillIn { to { fill-opacity: 1; } }
     @keyframes fadeInFill { to { opacity: 1; } }
@@ -204,12 +219,10 @@
       to   { opacity: 1; transform: none; filter: none; }
     }
 
-    /* Texto: palavra por palavra */
     .anim .w { display: inline-block; opacity: 0; animation: wordIn .7s var(--ease) calc(.15s + var(--i, 0) * 70ms) forwards; }
     .anim .hero__lede { opacity: 0; animation: fadeInUp .9s var(--ease) var(--lede-delay, 1.2s) forwards; }
     .anim .hero__cta  { opacity: 0; animation: fadeInUp .9s var(--ease) var(--cta-delay, 1.6s) forwards; }
 
-    /* Avatar: traço sendo desenhado, depois preenchimento */
     .anim .avatar { visibility: hidden; }
     .anim.ready .avatar { visibility: visible; }
 
@@ -274,7 +287,6 @@
     .author-info span { font-family: var(--sans); font-size: 0.8rem; color: var(--muted); }
 
     .audit-form { display: flex; gap: 12px; margin-top: 28px; max-width: 500px; flex-wrap: wrap; }
-    /* font-size 1rem evita o zoom automático do iOS ao focar o campo */
     .audit-input { flex: 1; min-width: 250px; min-height: 48px; padding: 14px 16px; border: 1px solid var(--card-border); border-radius: 8px; background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 1rem; }
     .audit-input[aria-invalid="true"] { border-color: #b00020; }
     :root[data-theme="dark"] .audit-input[aria-invalid="true"] { border-color: #ff8a95; }
@@ -330,8 +342,6 @@
       .hero__lede { font-size: clamp(1rem, 0.95rem + 0.3vw, 1.15rem); }
     }
 
-    /* Modo calm (movimento reduzido no sistema): a introdução continua, mas só com
-       fade e traço; sem deslocamento, desfoque, respiração, piscar ou movimento de cabeça. */
     @keyframes wordFade { from { opacity: 0; } to { opacity: 1; } }
     @keyframes fadeOnly { to { opacity: 1; } }
     .calm .w { transform: none; filter: none; animation-name: wordFade; }
@@ -355,14 +365,39 @@
       <span class="logo-text">Pinnacle</span>
     </a>
 
-    <div class="header-actions" style="display:flex; gap:15px; align-items:center;">
+    <div class="header-actions">
+      <!-- Menu Desktop -->
+      <nav class="nav-desktop" aria-label="Navegação principal">
+        <a href="#inicio">Home</a>
+        <a href="#portfolio">Demonstração</a>
+        <a href="#processo">Como Trabalho</a>
+        <a href="#auditoria">Auditoria</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Alternar tema claro e escuro" aria-pressed="false">
         <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
         <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
       </button>
+
       <a href="#contato" class="btn">Contato</a>
+
+      <!-- Botão Hambúrguer (Mobile) -->
+      <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="nav-mobile" aria-label="Abrir menu de navegação">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
     </div>
   </header>
+
+  <!-- Menu Mobile (oculto por padrão) -->
+  <nav class="nav-mobile" id="nav-mobile" aria-label="Navegação mobile">
+    <a href="#inicio">Home</a>
+    <a href="#portfolio">Demonstração</a>
+    <a href="#processo">Como Trabalho</a>
+    <a href="#auditoria">Auditoria PageSpeed</a>
+    <a href="#faq">Perguntas Frequentes</a>
+    <a href="#contato">Contato</a>
+  </nav>
 
   <main id="conteudo" tabindex="-1">
     <section class="hero" id="inicio">
@@ -613,7 +648,6 @@
       <h2 class="h2">Vamos conversar<span class="dot">.</span></h2>
       <p class="section__lede">Tem um site para tirar do papel? Conte a ideia e eu respondo com os próximos passos.</p>
       <div class="contact-actions">
-        <!-- Fica oculto até você preencher WHATSAPP_NUMBER no script (evita botão morto) -->
         <a class="btn btn--lg" id="waContact" href="#" target="_blank" rel="noopener" hidden>Chamar no WhatsApp</a>
         <a class="btn btn--lg btn--outline" href="mailto:spadeto.vendas@gmail.com">Enviar e-mail</a>
       </div>
@@ -633,8 +667,6 @@
     (function () {
       'use strict';
 
-      /* ===== CONFIGURAÇÃO ===== */
-      // Número com DDI+DDD, só dígitos. Ex.: '5561999999999'. Vazio = botões de WhatsApp ficam ocultos.
       var WHATSAPP_NUMBER = '';
       var WHATSAPP_TEXT = 'Olá! Vim pelo site da Pinnacle e gostaria de um orçamento.';
 
@@ -657,7 +689,25 @@
         syncBtn();
       });
 
-      /* ===== WHATSAPP (só aparece com número configurado) ===== */
+      /* ===== MENU MOBILE ===== */
+      var menuToggle = document.getElementById('menu-toggle');
+      var navMobile = document.getElementById('nav-mobile');
+      if (menuToggle && navMobile) {
+        menuToggle.addEventListener('click', function () {
+          var expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', !expanded);
+          navMobile.classList.toggle('is-open');
+        });
+        // Fecha o menu ao clicar em um link
+        navMobile.querySelectorAll('a').forEach(function (link) {
+          link.addEventListener('click', function () {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            navMobile.classList.remove('is-open');
+          });
+        });
+      }
+
+      /* ===== WHATSAPP ===== */
       if (/^\d{10,15}$/.test(WHATSAPP_NUMBER)) {
         var waLink = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(WHATSAPP_TEXT);
         ['waFloat', 'waContact'].forEach(function (id) {
@@ -671,9 +721,8 @@
       var head = document.getElementById('head');
       var pupilL = document.getElementById('pupilL');
       var pupilR = document.getElementById('pupilR');
-      var introEnd = 0; // segundos até o avatar terminar de ser desenhado
+      var introEnd = 0;
 
-      // Envolve cada palavra num <span class="w">, preservando <b> e espaços.
       function splitWords(node, state) {
         Array.prototype.slice.call(node.childNodes).forEach(function (n) {
           if (n.nodeType === 3) {
@@ -699,7 +748,6 @@
 
       if (root.classList.contains('anim')) {
         try {
-          // Texto
           var title = document.querySelector('.hero__title');
           var st = { i: 0 };
           splitWords(title, st);
@@ -707,10 +755,9 @@
           root.style.setProperty('--lede-delay', textEnd.toFixed(2) + 's');
           root.style.setProperty('--cta-delay', (textEnd + 0.4).toFixed(2) + 's');
 
-          // Avatar: mede cada traço e escalona o desenho
           var strokes = avatar.querySelectorAll('.st');
           var lastDelay = 0;
-          var step = Math.min(0.06, 1.6 / strokes.length); // desenho total ~1,6 s
+          var step = Math.min(0.06, 1.6 / strokes.length);
           Array.prototype.forEach.call(strokes, function (el, i) {
             var len = Math.ceil(el.getTotalLength()) + 2;
             var delay = 0.45 + i * step;
@@ -718,13 +765,11 @@
             el.style.setProperty('--d', delay.toFixed(2) + 's');
             lastDelay = delay;
           });
-          // Preenchimentos deslocados (.fl) aparecem junto com o contorno que vem logo depois
           Array.prototype.forEach.call(avatar.querySelectorAll('.fl'), function (el) {
             var n = el.nextElementSibling;
             while (n && !n.classList.contains('st')) n = n.nextElementSibling;
             if (n) el.style.setProperty('--d', n.style.getPropertyValue('--d'));
           });
-          // ...exceto as mechas atrás do rosto: esperam o rosto ser desenhado
           var faceEl = avatar.querySelector('#head .st.b');
           Array.prototype.forEach.call(avatar.querySelectorAll('.fl.late'), function (el) {
             if (faceEl) el.style.setProperty('--d', faceEl.style.getPropertyValue('--d'));
@@ -735,16 +780,16 @@
 
           root.classList.add('ready');
         } catch (err) {
-          root.classList.remove('anim'); // qualquer falha: mostra tudo normalmente
+          root.classList.remove('anim');
         }
       }
 
-      /* ===== OLHOS E CABEÇA SEGUEM O PONTEIRO (+ olhar ocioso) ===== */
+      /* ===== OLHOS E CABEÇA ===== */
       if (avatar && head && pupilL && pupilR) {
         var live = false, visible = true, lastMove = 0, rect = null, running = false;
-        var tHX = 0, tHY = 0;   // alvo (-1..1)
-        var hX = 0, hY = 0;     // cabeça (lenta)
-        var pX = 0, pY = 0;     // pupilas (rápidas: os olhos "lideram")
+        var tHX = 0, tHY = 0;
+        var hX = 0, hY = 0;
+        var pX = 0, pY = 0;
 
         function clamp(v) { return Math.max(-1, Math.min(1, v)); }
 
@@ -769,15 +814,13 @@
           if (!rect) rect = avatar.getBoundingClientRect();
           var cx = rect.left + rect.width / 2;
           var cy = rect.top + rect.height * 0.5;
-          // Alcance proporcional ao tamanho do avatar: o olhar chega ao limite
-          // quando o ponteiro está ~1,3 largura de distância, em qualquer lado da tela.
           look(clamp((e.clientX - cx) / (rect.width * 1.3)),
                clamp((e.clientY - cy) / (rect.height * 0.9)));
           lastMove = Date.now();
         }
 
         window.addEventListener('pointermove', onPointer, { passive: true });
-        window.addEventListener('pointerdown', onPointer, { passive: true }); // toque
+        window.addEventListener('pointerdown', onPointer, { passive: true });
         window.addEventListener('scroll', function () { rect = null; }, { passive: true });
         window.addEventListener('resize', function () { rect = null; });
         root.addEventListener('mouseleave', function () { if (live) look(0, 0); });
@@ -788,7 +831,6 @@
           }).observe(avatar);
         }
 
-        // Olhar ocioso: se ninguém mexe o mouse por um tempo, ele "olha em volta".
         function idle() {
           if (!calm && live && visible && !document.hidden && Date.now() - lastMove > 2500) {
             look((Math.random() * 2 - 1) * 0.7, (Math.random() * 2 - 1) * 0.4);
@@ -796,11 +838,10 @@
           setTimeout(idle, 1800 + Math.random() * 2600);
         }
 
-        // Só "acorda" quando o desenho termina.
         setTimeout(function () { live = true; idle(); }, Math.round(introEnd * 1000) + 100);
       }
 
-      /* ===== AUDITORIA (PageSpeed) ===== */
+      /* ===== AUDITORIA ===== */
       var auditForm = document.getElementById('auditForm');
       var auditError = document.getElementById('auditError');
       var urlInput = document.getElementById('siteUrl');
