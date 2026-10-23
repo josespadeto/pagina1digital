@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pinnacle | Sites Rápidos, Seguros e Estáveis</title>
+  
+  <!-- TAG DE VERIFICAÇÃO DO GOOGLE SEARCH CONSOLE -->
+  <meta name="google-site-verification" content="9RfWGVe2BxJwIorRQh3PqkNcvrDsk4Pqx-wScFENsBs" />
+  
   <meta name="description" content="Desenvolvimento de sites de alta performance. Velocidade, segurança e estabilidade para o seu negócio. Sem mensalidades, foco em resultado.">
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,8 56,56 8,56' fill='%23aadcec' stroke='%237b22e6' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E">
@@ -775,7 +779,8 @@
           });
           introEnd = lastDelay + 1.1;
           avatar.style.setProperty('--end', introEnd.toFixed(2) + 's');
-          avatar.style.setProperty('--blink-delay', (introEnd + 1.2).toFixed(2) + 's');
+          root.style.setProperty('--end', introEnd.toFixed(2) + 's');
+          root.style.setProperty('--blink-delay', (introEnd + 1.2).toFixed(2) + 's');
 
           root.classList.add('ready');
         } catch (err) {
@@ -837,7 +842,8 @@
           setTimeout(idle, 1800 + Math.random() * 2600);
         }
 
-        setTimeout(function () { live = true; idle(); }, Math.round(introEnd * 1000) + 100);
+        // Só "acorda" quando o desenho termina (com fallback de segurança de 5s)
+        setTimeout(function () { live = true; idle(); }, Math.max(introEnd * 1000 + 100, 5000));
       }
 
       /* ===== AUDITORIA ===== */
